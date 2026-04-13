@@ -6,25 +6,27 @@ import { ArgsType, Directive, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 @Directive('@key(fields: "id")')
-export class Vehicle {
+export class Home {
   id: string;
-  thing: string;
   userId: string;
+  address: string;
+  yearBuilt?: number;
+  sqFootage?: number;
+  notes?: string;
 }
 
 @ArgsType()
-export class CreateVehicleArgs {
-  thing: string;
+export class CreateHomeArgs {
+  address: string;
+  yearBuilt?: number;
+  sqFootage?: number;
+  notes?: string;
 }
 
 @ArgsType()
-export class UpdateVehicleArgs {
-  thing: string;
-}
-
-@ObjectType()
-@Directive('@shareable')
-export class DeleteResult {
-  acknowledged: boolean;
-  deletedCount: number;
+export class UpdateHomeArgs {
+  address?: string;
+  yearBuilt?: number;
+  sqFootage?: number;
+  notes?: string;
 }

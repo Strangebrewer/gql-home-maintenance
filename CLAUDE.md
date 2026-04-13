@@ -8,17 +8,32 @@ Created from `gql-subgraph-template`. All patterns, structure, and tooling are i
 
 ---
 
-## Known Domains
+## Domains
 
-- `vehicles` — vehicle maintenance records
+### `vehicles`
+Vehicle maintenance records — service history, repairs, inspections, mileage logs, etc.
 
-Additional domains TBD.
+| Detail | Value |
+|---|---|
+| ID prefix | `VHL-` |
+| Collection env var | `VEHICLES_COLLECTION` |
+| Collection default | `vehicles` |
+
+### `home`
+Home maintenance records — repairs, inspections, appliance service, seasonal tasks, etc.
+
+| Detail | Value |
+|---|---|
+| ID prefix | `HOM-` |
+| Collection env var | `HOME_RECORDS_COLLECTION` |
+| Collection default | `home_records` |
 
 ---
 
 ## Current State
 
-- Created from `gql-subgraph-template` via GitHub template
-- `package.json` name updated to `gql-home-maintenance`
-- No domain code written yet — `example/` domain from template is still in place as reference
-- **Next**: write CLAUDE.md and README, then begin `vehicles` domain
+- All five domains implemented: `vehicle`, `service_record`, `home`, `home_task`, `home_completion`
+- `example/` domain removed
+- `DeleteResult` lives in `src/common/models/common.model.ts` — shared across all domains
+- Integration tests written for all five domains (`test/*.integration.spec.ts`)
+- **Next**: deploy to dev, run migrations (none needed — MongoDB), verify live

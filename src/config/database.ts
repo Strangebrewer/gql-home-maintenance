@@ -6,6 +6,10 @@ export type DatabaseConfig = {
   name: string;
   collections: {
     vehicle: string;
+    serviceRecord: string;
+    home: string;
+    homeTask: string;
+    homeCompletion: string;
   };
 };
 
@@ -17,5 +21,9 @@ export default (): DatabaseConfig => ({
   name: process.env.DB_NAME || '',
   collections: {
     vehicle: process.env.VEHICLE_COLLECTION || 'vehicles',
+    serviceRecord: process.env.SERVICE_RECORD_COLLECTION || 'service_records',
+    home: process.env.HOME_COLLECTION || 'homes',
+    homeTask: process.env.HOME_TASK_COLLECTION || 'home_tasks',
+    homeCompletion: process.env.HOME_COMPLETION_COLLECTION || 'home_completions',
   },
 });

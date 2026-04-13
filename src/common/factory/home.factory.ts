@@ -2,15 +2,15 @@ import { ConfigService } from '@nestjs/config';
 import { DatabaseConfig } from '../../config/database';
 import { Collection, Db } from 'mongodb';
 import { DB_CLIENT } from '../../shared/mongo/mongo.module';
-import { VehicleEntity } from './vehicle.entity';
+import { HomeEntity } from '../../app/home/models/home.entity';
 
-export const VEHICLE_COLLECTION = 'VEHICLE_COLLECTION';
+export const HOME_COLLECTION = 'HOME_COLLECTION';
 
-export const VehicleCollectionFactory = {
-  provide: VEHICLE_COLLECTION,
-  useFactory: (configService: ConfigService, db: Db): Collection<VehicleEntity> => {
+export const HomeCollectionFactory = {
+  provide: HOME_COLLECTION,
+  useFactory: (configService: ConfigService, db: Db): Collection<HomeEntity> => {
     const { collections } = configService.get<DatabaseConfig>('database');
-    return db.collection(collections.vehicle);
+    return db.collection(collections.home);
   },
   inject: [ConfigService, DB_CLIENT],
 };

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Collection, Filter, FindOptions, ReturnDocument, UpdateFilter } from 'mongodb';
-import { VEHICLE_COLLECTION } from './vehicle.factory';
-import { VehicleEntity, VehicleEntityRead } from './vehicle.entity';
+import { VEHICLE_COLLECTION } from '../../common/factory/vehicle.factory';
+import { VehicleEntity, VehicleEntityRead } from './models/vehicle.entity';
 
 @Injectable()
 export class VehicleRepository {

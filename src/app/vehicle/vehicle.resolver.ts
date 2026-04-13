@@ -1,7 +1,8 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtAccessGuard, JwtUserId } from '../../common/guards/jwt-access.guard';
-import { CreateVehicleArgs, DeleteResult, Vehicle, UpdateVehicleArgs } from './vehicle.model';
+import { DeleteResult } from '../../common/models/common.model';
+import { CreateVehicleArgs, Vehicle, UpdateVehicleArgs } from './models/vehicle.model';
 import { VehicleService } from './vehicle.service';
 
 @Resolver(() => Vehicle)
