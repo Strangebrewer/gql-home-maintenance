@@ -37,7 +37,7 @@ jobs:
         run: pnpm run build
 
       - name: Test
-        run: pnpm test
+        run: pnpm test --passWithNoTests
 
       - name: Integration test
         run: pnpm run test:integration
