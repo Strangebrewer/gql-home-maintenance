@@ -1,17 +1,9 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, ArgsType, Field, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtAccessGuard, JwtUserId } from '../../common/guards/jwt-access.guard';
 import { DeleteResult } from '../../common/models/common.model';
-import { HomeTaskFrequency } from './models/home_task.entity';
-import { CreateHomeTaskArgs, HomeTask, UpdateHomeTaskArgs } from './models/home_task.model';
+import { CreateHomeTaskArgs, GetHomeTasksArgs, HomeTask, UpdateHomeTaskArgs } from './models/home_task.model';
 import { HomeTaskService } from './home_task.service';
-
-@ArgsType()
-class GetHomeTasksArgs {
-  homeId: string;
-  @Field(() => HomeTaskFrequency, { nullable: true })
-  frequency?: HomeTaskFrequency;
-}
 
 @Resolver(() => HomeTask)
 export class HomeTaskResolver {

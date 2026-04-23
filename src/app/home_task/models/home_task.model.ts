@@ -1,6 +1,13 @@
 import { ArgsType, Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { HomeTaskFrequency } from './home_task.entity';
 
+@ArgsType()
+export class GetHomeTasksArgs {
+  homeId: string;
+  @Field(() => HomeTaskFrequency, { nullable: true })
+  frequency?: HomeTaskFrequency;
+}
+
 // @Field() decorators are not required on these types — the @nestjs/graphql
 // CLI plugin (configured in nest-cli.json) infers them automatically from
 // files matching the .model.ts suffix. Enum fields require explicit @Field()
