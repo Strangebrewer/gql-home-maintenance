@@ -33,6 +33,15 @@ export class HomeCompletionRepository {
     );
   }
 
+  async findMostRecentByTask(taskId: string): Promise<HomeCompletionEntityRead | null> {
+    const results = await this.collection
+      .find({ taskId } as Filter<HomeCompletionEntityRead>)
+      .sort({ date: -1 })
+      .limit(1)
+      .toArray();
+    return results[0] ?? null;
+  }
+
   async deleteOne(id: string) {
     return this.collection.deleteOne({ [this.primaryKey]: id } as Filter<HomeCompletionEntityRead>);
   }

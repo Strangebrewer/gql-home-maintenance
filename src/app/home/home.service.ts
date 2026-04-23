@@ -29,12 +29,24 @@ export class HomeService {
   }
 
   async create(args: CreateHomeArgs, userId: string): Promise<Home> {
+    const existing = await this.homeRepository.find({ userId });
     const entity: HomeEntity = {
       ...args,
       userId,
+      isPrimary: existing.length === 0,
       id: this.idGenerator.generate('HOM'),
     };
     const record = await this.homeRepository.create(entity);
+    return mapToModel(record);
+  }
+
+  async setPrimaryHome(id: string, userId: string): Promise<Home> {
+    const record = await this.homeRepository.setPrimary(id, userId);
+    if (!record) {
+      throw new GraphQLError('Home not found', {
+        extensions: { code: 404 },
+      });
+    }
     return mapToModel(record);
   }
 
@@ -58,8 +70,10 @@ function mapToModel(entity: HomeEntity): Home {
     id: entity.id,
     userId: entity.userId,
     address: entity.address,
+    isPrimary: entity.isPrimary,
     yearBuilt: entity.yearBuilt,
     sqFootage: entity.sqFootage,
     notes: entity.notes,
+    customData: entity.customData,
   };
 }

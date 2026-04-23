@@ -61,5 +61,6 @@ function mapToModel(entity: HomeTaskEntity): HomeTask {
     name: entity.name,
     frequency: entity.frequency,
     description: entity.description,
+    lastCompletionDate: entity.lastCompletionDate,
   };
 }

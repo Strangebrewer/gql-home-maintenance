@@ -43,6 +43,15 @@ export class HomeResolver {
     return this.homeService.update(id, args);
   }
 
+  @Mutation(() => Home)
+  @UseGuards(JwtAccessGuard)
+  async setPrimaryHome(
+    @Args('id') id: string,
+    @JwtUserId() userId: string,
+  ): Promise<Home> {
+    return this.homeService.setPrimaryHome(id, userId);
+  }
+
   @Mutation(() => DeleteResult)
   @UseGuards(JwtAccessGuard)
   async deleteHome(

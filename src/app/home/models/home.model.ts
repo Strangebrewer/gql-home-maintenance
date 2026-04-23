@@ -10,9 +10,11 @@ export class Home {
   id: string;
   userId: string;
   address: string;
+  isPrimary: boolean;
   yearBuilt?: number;
   sqFootage?: number;
   notes?: string;
+  customData?: string;
 }
 
 @ArgsType()
@@ -21,6 +23,7 @@ export class CreateHomeArgs {
   yearBuilt?: number;
   sqFootage?: number;
   notes?: string;
+  customData?: string;
 }
 
 @ArgsType()
@@ -29,4 +32,5 @@ export class UpdateHomeArgs {
   yearBuilt?: number;
   sqFootage?: number;
   notes?: string;
+  customData?: string;
 }

@@ -33,6 +33,18 @@ export class HomeRepository {
     );
   }
 
+  async setPrimary(id: string, userId: string): Promise<HomeEntityRead> {
+    await this.collection.updateMany(
+      { userId } as Filter<HomeEntityRead>,
+      { $set: { isPrimary: false } },
+    );
+    return this.collection.findOneAndUpdate(
+      { [this.primaryKey]: id } as Filter<HomeEntityRead>,
+      { $set: { isPrimary: true } },
+      { returnDocument: ReturnDocument.AFTER },
+    );
+  }
+
   async deleteOne(id: string) {
     return this.collection.deleteOne({ [this.primaryKey]: id } as Filter<HomeEntityRead>);
   }

@@ -17,6 +17,7 @@ export class HomeTask {
   @Field(() => HomeTaskFrequency)
   frequency: HomeTaskFrequency;
   description?: string;
+  lastCompletionDate?: string;
 }
 
 @ArgsType()

@@ -13,6 +13,7 @@ export type HomeTaskEntity = {
   name: string;
   frequency: HomeTaskFrequency;
   description?: string;
+  lastCompletionDate?: string;
 };
 
 export type HomeTaskEntityRead = HomeTaskEntity & {

@@ -50,6 +50,11 @@ export class HomeCompletionService {
       id: this.idGenerator.generate('CMP'),
     };
     const record = await this.homeCompletionRepository.create(entity);
+
+    if (!task.lastCompletionDate || args.date > task.lastCompletionDate) {
+      await this.homeTaskRepository.findOneAndUpdate(args.taskId, { lastCompletionDate: args.date });
+    }
+
     return mapToModel(record);
   }
 
@@ -64,7 +69,21 @@ export class HomeCompletionService {
   }
 
   async delete(id: string): Promise<DeleteResult> {
-    return this.homeCompletionRepository.deleteOne(id);
+    const completion = await this.homeCompletionRepository.findById(id);
+    if (!completion) {
+      throw new GraphQLError('Home completion not found', {
+        extensions: { code: 404 },
+      });
+    }
+
+    const result = await this.homeCompletionRepository.deleteOne(id);
+
+    const mostRecent = await this.homeCompletionRepository.findMostRecentByTask(completion.taskId);
+    await this.homeTaskRepository.findOneAndUpdate(completion.taskId, {
+      lastCompletionDate: mostRecent?.date ?? null,
+    });
+
+    return result;
   }
 }
 
