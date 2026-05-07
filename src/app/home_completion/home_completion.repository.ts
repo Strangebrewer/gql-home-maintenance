@@ -1,41 +1,41 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Collection, Filter, FindOptions, ReturnDocument, UpdateFilter } from 'mongodb';
 import { HOME_COMPLETION_COLLECTION } from '../../common/factory/home_completion.factory';
-import { HomeCompletionEntity, HomeCompletionEntityRead } from './models/home_completion.entity';
+import { HomeCompletionEntity } from './models/home_completion.entity';
 
 @Injectable()
 export class HomeCompletionRepository {
-  private readonly primaryKey = 'id';
+  private readonly primaryKey = '_id';
 
   constructor(
     @Inject(HOME_COMPLETION_COLLECTION)
-    private readonly collection: Collection<HomeCompletionEntityRead>,
+    private readonly collection: Collection<HomeCompletionEntity>,
   ) {}
 
-  async findById(id: string, options?: FindOptions): Promise<HomeCompletionEntityRead> {
-    return this.collection.findOne({ [this.primaryKey]: id } as Filter<HomeCompletionEntityRead>, options);
+  async findById(id: string, options?: FindOptions): Promise<HomeCompletionEntity> {
+    return this.collection.findOne({ [this.primaryKey]: id } as Filter<HomeCompletionEntity>, options);
   }
 
-  async find(filter: Filter<HomeCompletionEntityRead>, options?: FindOptions): Promise<HomeCompletionEntityRead[]> {
+  async find(filter: Filter<HomeCompletionEntity>, options?: FindOptions): Promise<HomeCompletionEntity[]> {
     return this.collection.find(filter, options).toArray();
   }
 
-  async create(entity: HomeCompletionEntity): Promise<HomeCompletionEntityRead> {
-    const result = await this.collection.insertOne(entity as HomeCompletionEntityRead);
-    return { _id: result.insertedId.toString(), ...entity };
+  async create(entity: HomeCompletionEntity): Promise<HomeCompletionEntity> {
+    await this.collection.insertOne(entity);
+    return entity;
   }
 
-  async findOneAndUpdate(id: string, fields: UpdateFilter<HomeCompletionEntity>): Promise<HomeCompletionEntityRead> {
+  async findOneAndUpdate(id: string, fields: UpdateFilter<HomeCompletionEntity>): Promise<HomeCompletionEntity> {
     return this.collection.findOneAndUpdate(
-      { [this.primaryKey]: id } as Filter<HomeCompletionEntityRead>,
+      { [this.primaryKey]: id } as Filter<HomeCompletionEntity>,
       { $set: fields },
       { returnDocument: ReturnDocument.AFTER },
     );
   }
 
-  async findMostRecentByTask(taskId: string): Promise<HomeCompletionEntityRead | null> {
+  async findMostRecentByTask(taskId: string): Promise<HomeCompletionEntity | null> {
     const results = await this.collection
-      .find({ taskId } as Filter<HomeCompletionEntityRead>)
+      .find({ taskId } as Filter<HomeCompletionEntity>)
       .sort({ date: -1 })
       .limit(1)
       .toArray();
@@ -43,6 +43,6 @@ export class HomeCompletionRepository {
   }
 
   async deleteOne(id: string) {
-    return this.collection.deleteOne({ [this.primaryKey]: id } as Filter<HomeCompletionEntityRead>);
+    return this.collection.deleteOne({ [this.primaryKey]: id } as Filter<HomeCompletionEntity>);
   }
 }

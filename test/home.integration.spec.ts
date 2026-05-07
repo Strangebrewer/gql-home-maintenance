@@ -4,7 +4,6 @@ import { Db, MongoClient } from 'mongodb';
 import { HOME_COLLECTION } from '../src/common/factory/home.factory';
 import { HomeRepository } from '../src/app/home/home.repository';
 import { HomeService } from '../src/app/home/home.service';
-import { IdGeneratorService } from '../src/shared/libs/id-generator/id-generator.service';
 
 describe('Home (integration)', () => {
   let container: StartedMongoDBContainer;
@@ -23,7 +22,6 @@ describe('Home (integration)', () => {
         { provide: HOME_COLLECTION, useValue: db.collection('homes') },
         HomeRepository,
         HomeService,
-        IdGeneratorService,
       ],
     }).compile();
 
@@ -47,7 +45,7 @@ describe('Home (integration)', () => {
       userId,
     );
 
-    expect(created.id).toMatch(/^HOM-/);
+    expect(created.id).toBeDefined();
     expect(created.address).toBe('123 Main St');
     expect(created.yearBuilt).toBe(1995);
     expect(created.sqFootage).toBe(2100);

@@ -5,7 +5,6 @@ import { HomeTaskFrequency } from '../src/app/home_task/models/home_task.entity'
 import { HOME_TASK_COLLECTION } from '../src/common/factory/home_task.factory';
 import { HomeTaskRepository } from '../src/app/home_task/home_task.repository';
 import { HomeTaskService } from '../src/app/home_task/home_task.service';
-import { IdGeneratorService } from '../src/shared/libs/id-generator/id-generator.service';
 
 describe('HomeTask (integration)', () => {
   let container: StartedMongoDBContainer;
@@ -24,7 +23,6 @@ describe('HomeTask (integration)', () => {
         { provide: HOME_TASK_COLLECTION, useValue: db.collection('home_tasks') },
         HomeTaskRepository,
         HomeTaskService,
-        IdGeneratorService,
       ],
     }).compile();
 
@@ -44,14 +42,14 @@ describe('HomeTask (integration)', () => {
   it('creates and retrieves a home task', async () => {
     const userId = 'user-1';
     const created = await service.create(
-      { homeId: 'HOM-123', name: 'Service HVAC', frequency: HomeTaskFrequency.ANNUAL },
+      { homeId: 'home-123', name: 'Service HVAC', frequency: HomeTaskFrequency.ANNUAL },
       userId,
     );
 
-    expect(created.id).toMatch(/^TSK-/);
+    expect(created.id).toBeDefined();
     expect(created.name).toBe('Service HVAC');
     expect(created.frequency).toBe(HomeTaskFrequency.ANNUAL);
-    expect(created.homeId).toBe('HOM-123');
+    expect(created.homeId).toBe('home-123');
     expect(created.userId).toBe(userId);
 
     const found = await service.findById(created.id);
@@ -59,27 +57,27 @@ describe('HomeTask (integration)', () => {
   });
 
   it('finds all tasks for a home', async () => {
-    await service.create({ homeId: 'HOM-123', name: 'Clean gutters', frequency: HomeTaskFrequency.SEASONAL }, 'user-1');
-    await service.create({ homeId: 'HOM-123', name: 'Change HVAC filter', frequency: HomeTaskFrequency.MONTHLY }, 'user-1');
-    await service.create({ homeId: 'HOM-456', name: 'Inspect roof', frequency: HomeTaskFrequency.ANNUAL }, 'user-1');
+    await service.create({ homeId: 'home-123', name: 'Clean gutters', frequency: HomeTaskFrequency.SEASONAL }, 'user-1');
+    await service.create({ homeId: 'home-123', name: 'Change HVAC filter', frequency: HomeTaskFrequency.MONTHLY }, 'user-1');
+    await service.create({ homeId: 'home-456', name: 'Inspect roof', frequency: HomeTaskFrequency.ANNUAL }, 'user-1');
 
-    const results = await service.find('HOM-123');
+    const results = await service.find('home-123');
     expect(results).toHaveLength(2);
   });
 
   it('filters tasks by frequency', async () => {
-    await service.create({ homeId: 'HOM-123', name: 'Change HVAC filter', frequency: HomeTaskFrequency.MONTHLY }, 'user-1');
-    await service.create({ homeId: 'HOM-123', name: 'Clean gutters', frequency: HomeTaskFrequency.SEASONAL }, 'user-1');
-    await service.create({ homeId: 'HOM-123', name: 'Service HVAC', frequency: HomeTaskFrequency.ANNUAL }, 'user-1');
+    await service.create({ homeId: 'home-123', name: 'Change HVAC filter', frequency: HomeTaskFrequency.MONTHLY }, 'user-1');
+    await service.create({ homeId: 'home-123', name: 'Clean gutters', frequency: HomeTaskFrequency.SEASONAL }, 'user-1');
+    await service.create({ homeId: 'home-123', name: 'Service HVAC', frequency: HomeTaskFrequency.ANNUAL }, 'user-1');
 
-    const monthly = await service.find('HOM-123', HomeTaskFrequency.MONTHLY);
+    const monthly = await service.find('home-123', HomeTaskFrequency.MONTHLY);
     expect(monthly).toHaveLength(1);
     expect(monthly[0].name).toBe('Change HVAC filter');
   });
 
   it('updates a home task', async () => {
     const created = await service.create(
-      { homeId: 'HOM-123', name: 'Service HVAC', frequency: HomeTaskFrequency.ANNUAL },
+      { homeId: 'home-123', name: 'Service HVAC', frequency: HomeTaskFrequency.ANNUAL },
       'user-1',
     );
     const updated = await service.update(created.id, {
@@ -93,7 +91,7 @@ describe('HomeTask (integration)', () => {
 
   it('deletes a home task', async () => {
     const created = await service.create(
-      { homeId: 'HOM-123', name: 'Service HVAC', frequency: HomeTaskFrequency.ANNUAL },
+      { homeId: 'home-123', name: 'Service HVAC', frequency: HomeTaskFrequency.ANNUAL },
       'user-1',
     );
     const result = await service.delete(created.id);

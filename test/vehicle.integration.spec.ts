@@ -4,7 +4,6 @@ import { Db, MongoClient } from 'mongodb';
 import { VEHICLE_COLLECTION } from '../src/common/factory/vehicle.factory';
 import { VehicleRepository } from '../src/app/vehicle/vehicle.repository';
 import { VehicleService } from '../src/app/vehicle/vehicle.service';
-import { IdGeneratorService } from '../src/shared/libs/id-generator/id-generator.service';
 
 describe('Vehicle (integration)', () => {
   let container: StartedMongoDBContainer;
@@ -23,7 +22,6 @@ describe('Vehicle (integration)', () => {
         { provide: VEHICLE_COLLECTION, useValue: db.collection('vehicles') },
         VehicleRepository,
         VehicleService,
-        IdGeneratorService,
       ],
     }).compile();
 
@@ -47,7 +45,7 @@ describe('Vehicle (integration)', () => {
       userId,
     );
 
-    expect(created.id).toMatch(/^VHL-/);
+    expect(created.id).toBeDefined();
     expect(created.year).toBe(2020);
     expect(created.make).toBe('Toyota');
     expect(created.model).toBe('Camry');

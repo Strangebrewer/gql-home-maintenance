@@ -1,43 +1,43 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Collection, Filter, FindOptions, ReturnDocument, UpdateFilter } from 'mongodb';
 import { VEHICLE_COLLECTION } from '../../common/factory/vehicle.factory';
-import { VehicleEntity, VehicleEntityRead } from './models/vehicle.entity';
+import { VehicleEntity } from './models/vehicle.entity';
 
 @Injectable()
 export class VehicleRepository {
-  private readonly primaryKey = 'id';
+  private readonly primaryKey = '_id';
 
   constructor(
     @Inject(VEHICLE_COLLECTION)
-    private readonly collection: Collection<VehicleEntityRead>,
+    private readonly collection: Collection<VehicleEntity>,
   ) {}
 
-  async findOne(filter: Filter<VehicleEntityRead>, options?: FindOptions): Promise<VehicleEntityRead> {
+  async findOne(filter: Filter<VehicleEntity>, options?: FindOptions): Promise<VehicleEntity> {
     return this.collection.findOne(filter, options);
   }
 
-  async findById(id: string, options?: FindOptions): Promise<VehicleEntityRead> {
-    return this.collection.findOne({ [this.primaryKey]: id } as Filter<VehicleEntityRead>, options);
+  async findById(id: string, options?: FindOptions): Promise<VehicleEntity> {
+    return this.collection.findOne({ [this.primaryKey]: id } as Filter<VehicleEntity>, options);
   }
 
-  async find(filter: Filter<VehicleEntityRead>, options?: FindOptions): Promise<VehicleEntityRead[]> {
+  async find(filter: Filter<VehicleEntity>, options?: FindOptions): Promise<VehicleEntity[]> {
     return this.collection.find(filter, options).toArray();
   }
 
-  async create(entity: VehicleEntity): Promise<VehicleEntityRead> {
-    const result = await this.collection.insertOne(entity as VehicleEntityRead);
-    return { _id: result.insertedId.toString(), ...entity };
+  async create(entity: VehicleEntity): Promise<VehicleEntity> {
+    await this.collection.insertOne(entity);
+    return entity;
   }
 
-  async findOneAndUpdate(id: string, fields: UpdateFilter<VehicleEntity>): Promise<VehicleEntityRead> {
+  async findOneAndUpdate(id: string, fields: UpdateFilter<VehicleEntity>): Promise<VehicleEntity> {
     return this.collection.findOneAndUpdate(
-      { [this.primaryKey]: id } as Filter<VehicleEntityRead>,
+      { [this.primaryKey]: id } as Filter<VehicleEntity>,
       { $set: fields },
       { returnDocument: ReturnDocument.AFTER },
     );
   }
 
   async deleteOne(id: string) {
-    return this.collection.deleteOne({ [this.primaryKey]: id } as Filter<VehicleEntityRead>);
+    return this.collection.deleteOne({ [this.primaryKey]: id } as Filter<VehicleEntity>);
   }
 }

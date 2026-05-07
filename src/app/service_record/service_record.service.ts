@@ -1,6 +1,6 @@
+import { randomUUID } from 'crypto';
 import { Injectable } from '@nestjs/common';
 import { GraphQLError } from 'graphql';
-import { IdGeneratorService } from '../../shared/libs/id-generator/id-generator.service';
 import { DeleteResult } from '../../common/models/common.model';
 import { ServiceRecordEntity, ServiceRecordType } from './models/service_record.entity';
 import { CreateServiceRecordArgs, ServiceRecord, UpdateServiceRecordArgs } from './models/service_record.model';
@@ -8,10 +8,7 @@ import { ServiceRecordRepository } from './service_record.repository';
 
 @Injectable()
 export class ServiceRecordService {
-  constructor(
-    private readonly serviceRecordRepository: ServiceRecordRepository,
-    private readonly idGenerator: IdGeneratorService,
-  ) {}
+  constructor(private readonly serviceRecordRepository: ServiceRecordRepository) {}
 
   async findById(id: string): Promise<ServiceRecord> {
     const record = await this.serviceRecordRepository.findById(id);
@@ -32,7 +29,7 @@ export class ServiceRecordService {
     const entity: ServiceRecordEntity = {
       ...args,
       userId,
-      id: this.idGenerator.generate('SVC'),
+      _id: randomUUID(),
     };
     const record = await this.serviceRecordRepository.create(entity);
     return mapToModel(record);
@@ -55,7 +52,7 @@ export class ServiceRecordService {
 
 function mapToModel(entity: ServiceRecordEntity): ServiceRecord {
   return {
-    id: entity.id,
+    id: entity._id,
     userId: entity.userId,
     vehicleId: entity.vehicleId,
     type: entity.type,

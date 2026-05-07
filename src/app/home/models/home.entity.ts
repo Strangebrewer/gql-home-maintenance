@@ -1,5 +1,5 @@
 export type HomeEntity = {
-  id: string;
+  _id: string;
   userId: string;
   address: string;
   isPrimary: boolean;
@@ -7,8 +7,4 @@ export type HomeEntity = {
   sqFootage?: number;
   notes?: string;
   customData?: string;
-};
-
-export type HomeEntityRead = HomeEntity & {
-  _id?: string;
 };

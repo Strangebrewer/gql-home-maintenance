@@ -7,15 +7,11 @@ export enum HomeTaskFrequency {
 }
 
 export type HomeTaskEntity = {
-  id: string;
+  _id: string;
   userId: string;
   homeId: string;
   name: string;
   frequency: HomeTaskFrequency;
   description?: string;
   lastCompletionDate?: string;
-};
-
-export type HomeTaskEntityRead = HomeTaskEntity & {
-  _id?: string;
 };

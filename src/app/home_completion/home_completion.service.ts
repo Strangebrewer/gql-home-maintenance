@@ -1,6 +1,6 @@
+import { randomUUID } from 'crypto';
 import { Injectable } from '@nestjs/common';
 import { GraphQLError } from 'graphql';
-import { IdGeneratorService } from '../../shared/libs/id-generator/id-generator.service';
 import { DeleteResult } from '../../common/models/common.model';
 import { HomeTaskRepository } from '../home_task/home_task.repository';
 import { HomeCompletionEntity } from './models/home_completion.entity';
@@ -12,7 +12,6 @@ export class HomeCompletionService {
   constructor(
     private readonly homeCompletionRepository: HomeCompletionRepository,
     private readonly homeTaskRepository: HomeTaskRepository,
-    private readonly idGenerator: IdGeneratorService,
   ) {}
 
   async findById(id: string): Promise<HomeCompletion> {
@@ -47,7 +46,7 @@ export class HomeCompletionService {
       ...args,
       userId,
       homeId: task.homeId,
-      id: this.idGenerator.generate('CMP'),
+      _id: randomUUID(),
     };
     const record = await this.homeCompletionRepository.create(entity);
 
@@ -89,7 +88,7 @@ export class HomeCompletionService {
 
 function mapToModel(entity: HomeCompletionEntity): HomeCompletion {
   return {
-    id: entity.id,
+    id: entity._id,
     userId: entity.userId,
     homeId: entity.homeId,
     taskId: entity.taskId,

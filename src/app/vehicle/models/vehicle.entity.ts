@@ -1,5 +1,5 @@
 export type VehicleEntity = {
-  id: string;
+  _id: string;
   userId: string;
   year: number;
   make: string;
@@ -10,8 +10,4 @@ export type VehicleEntity = {
   plate?: string;
   vin?: string;
   insuranceId?: string;
-};
-
-export type VehicleEntityRead = VehicleEntity & {
-  _id?: string;
 };

@@ -5,7 +5,7 @@ export enum ServiceRecordType {
 }
 
 export type ServiceRecordEntity = {
-  id: string;
+  _id: string;
   userId: string;
   vehicleId: string;
   type: ServiceRecordType;
@@ -14,8 +14,4 @@ export type ServiceRecordEntity = {
   cost?: number;
   name?: string;
   description?: string;
-};
-
-export type ServiceRecordEntityRead = ServiceRecordEntity & {
-  _id?: string;
 };

@@ -1,6 +1,6 @@
+import { randomUUID } from 'crypto';
 import { Injectable } from '@nestjs/common';
 import { GraphQLError } from 'graphql';
-import { IdGeneratorService } from '../../shared/libs/id-generator/id-generator.service';
 import { DeleteResult } from '../../common/models/common.model';
 import { HomeTaskEntity, HomeTaskFrequency } from './models/home_task.entity';
 import { CreateHomeTaskArgs, HomeTask, UpdateHomeTaskArgs } from './models/home_task.model';
@@ -8,10 +8,7 @@ import { HomeTaskRepository } from './home_task.repository';
 
 @Injectable()
 export class HomeTaskService {
-  constructor(
-    private readonly homeTaskRepository: HomeTaskRepository,
-    private readonly idGenerator: IdGeneratorService,
-  ) {}
+  constructor(private readonly homeTaskRepository: HomeTaskRepository) {}
 
   async findById(id: string): Promise<HomeTask> {
     const record = await this.homeTaskRepository.findById(id);
@@ -32,7 +29,7 @@ export class HomeTaskService {
     const entity: HomeTaskEntity = {
       ...args,
       userId,
-      id: this.idGenerator.generate('TSK'),
+      _id: randomUUID(),
     };
     const record = await this.homeTaskRepository.create(entity);
     return mapToModel(record);
@@ -55,7 +52,7 @@ export class HomeTaskService {
 
 function mapToModel(entity: HomeTaskEntity): HomeTask {
   return {
-    id: entity.id,
+    id: entity._id,
     userId: entity.userId,
     homeId: entity.homeId,
     name: entity.name,
