@@ -1,5 +1,8 @@
-import { ApolloFederationDriver, ApolloFederationDriverConfig } from '@nestjs/apollo';
-import { Module } from '@nestjs/common';
+import {
+  ApolloFederationDriver,
+  ApolloFederationDriverConfig,
+} from '@nestjs/apollo';
+import { Module, UseInterceptors } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { LoggerModule } from 'nestjs-pino';
@@ -20,9 +23,10 @@ import { VehicleModule } from './app/vehicle/vehicle.module';
     }),
     LoggerModule.forRoot({
       pinoHttp: {
-        transport: process.env.NODE_ENV !== 'production'
-          ? { target: 'pino-pretty' }
-          : undefined,
+        transport:
+          process.env.NODE_ENV !== 'production'
+            ? { target: 'pino-pretty' }
+            : undefined,
       },
     }),
     GraphQLModule.forRoot<ApolloFederationDriverConfig>({

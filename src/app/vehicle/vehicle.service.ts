@@ -1,52 +1,89 @@
 import { randomUUID } from 'crypto';
-import { Injectable } from '@nestjs/common';
-import { GraphQLError } from 'graphql';
+import { Inject, Injectable } from '@nestjs/common';
 import { DeleteResult } from '../../common/models/common.model';
 import { VehicleEntity } from './models/vehicle.entity';
-import { CreateVehicleArgs, UpdateVehicleArgs, Vehicle } from './models/vehicle.model';
+import {
+  CreateVehicleArgs,
+  UpdateVehicleArgs,
+  Vehicle,
+} from './models/vehicle.model';
 import { VehicleRepository } from './vehicle.repository';
+import { NotFoundError } from '../../common/errors';
+import { TRACER_CLIENT, TracerClient } from 'src/shared/tracer/tracer.module';
 
 @Injectable()
 export class VehicleService {
-  constructor(private readonly vehicleRepository: VehicleRepository) {}
+  constructor(
+    private readonly vehicleRepository: VehicleRepository,
+    @Inject(TRACER_CLIENT) private tracer: TracerClient,
+  ) {}
 
-  async findById(id: string): Promise<Vehicle> {
+  async findById(id: string, traceId?: string): Promise<Vehicle> {
+    const start = new Date();
+    const op = `find_vehicle by id: ${id}`;
     const record = await this.vehicleRepository.findById(id);
     if (!record) {
-      throw new GraphQLError('Vehicle not found', {
-        extensions: { code: 404 },
-      });
+      const end = new Date();
+      this.tracer.sendErrorSpan(traceId, op, 'Vehicle not found', start, end);
+      throw new NotFoundError('Vehicle');
     }
+    const end = new Date();
+    this.tracer.sendSpan(traceId, op, start, end);
     return mapToModel(record);
   }
 
-  async find(userId: string): Promise<Vehicle[]> {
+  async find(userId: string, traceId?: string): Promise<Vehicle[]> {
+    const start = new Date();
+    const op = 'find_vehicles';
     const records = await this.vehicleRepository.find({ userId });
+    const end = new Date();
+    this.tracer.sendSpan(traceId, op, start, end);
     return records.map(mapToModel);
   }
 
-  async create(args: CreateVehicleArgs, userId: string): Promise<Vehicle> {
+  async create(
+    args: CreateVehicleArgs,
+    userId: string,
+    traceId?: string,
+  ): Promise<Vehicle> {
+    const start = new Date();
+    const op = 'create_vehicle';
     const entity: VehicleEntity = {
       ...args,
       userId,
       _id: randomUUID(),
     };
     const record = await this.vehicleRepository.create(entity);
+    const end = new Date();
+    this.tracer.sendSpan(traceId, op, start, end);
     return mapToModel(record);
   }
 
-  async update(id: string, args: UpdateVehicleArgs): Promise<Vehicle> {
+  async update(
+    id: string,
+    args: UpdateVehicleArgs,
+    traceId?: string,
+  ): Promise<Vehicle> {
+    const start = new Date();
+    const op = `update_vehicle by id: ${id}`;
     const record = await this.vehicleRepository.findOneAndUpdate(id, args);
     if (!record) {
-      throw new GraphQLError('Vehicle not found', {
-        extensions: { code: 404 },
-      });
+      const end = new Date();
+      this.tracer.sendErrorSpan(traceId, op, 'Vehicle not found', start, end);
+      throw new NotFoundError('Vehicle');
     }
+    const end = new Date();
+    this.tracer.sendSpan(traceId, op, start, end);
     return mapToModel(record);
   }
 
-  async delete(id: string): Promise<DeleteResult> {
-    return this.vehicleRepository.deleteOne(id);
+  async delete(id: string, traceId?: string): Promise<DeleteResult> {
+    const start = new Date();
+    const op = `delete_vehicle by id: ${id}`;
+    const result = await this.vehicleRepository.deleteOne(id);
+    const end = new Date();
+    this.tracer.sendSpan(traceId, op, start, end);
+    return result;
   }
 }
 

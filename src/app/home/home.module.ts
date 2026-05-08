@@ -4,15 +4,11 @@ import { HomeCollectionFactory } from '../../common/factory/home.factory';
 import { HomeRepository } from './home.repository';
 import { HomeResolver } from './home.resolver';
 import { HomeService } from './home.service';
+import { TracerModule } from 'src/shared/tracer/tracer.module';
 
 @Module({
   imports: [SharedModule],
-  providers: [
-    HomeCollectionFactory,
-    HomeRepository,
-    HomeResolver,
-    HomeService,
-  ],
+  providers: [HomeCollectionFactory, HomeRepository, HomeResolver, HomeService],
   exports: [HomeRepository],
 })
 export class HomeModule {}
