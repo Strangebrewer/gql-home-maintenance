@@ -9,7 +9,7 @@ import {
 } from './models/home_task.model';
 import { HomeTaskRepository } from './home_task.repository';
 import { NotFoundError } from '../../common/errors';
-import { TRACER_CLIENT, TracerClient } from 'src/shared/tracer/tracer.module';
+import { TRACER_CLIENT, TracerClient } from '../../shared/tracer/tracer.module';
 
 @Injectable()
 export class HomeTaskService {

@@ -9,7 +9,7 @@ import {
 } from './models/vehicle.model';
 import { VehicleRepository } from './vehicle.repository';
 import { NotFoundError } from '../../common/errors';
-import { TRACER_CLIENT, TracerClient } from 'src/shared/tracer/tracer.module';
+import { TRACER_CLIENT, TracerClient } from '../../shared/tracer/tracer.module';
 
 @Injectable()
 export class VehicleService {

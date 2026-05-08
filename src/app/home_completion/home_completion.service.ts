@@ -10,7 +10,7 @@ import {
 } from './models/home_completion.model';
 import { HomeCompletionRepository } from './home_completion.repository';
 import { NotFoundError } from '../../common/errors';
-import { TRACER_CLIENT, TracerClient } from 'src/shared/tracer/tracer.module';
+import { TRACER_CLIENT, TracerClient } from '../../shared/tracer/tracer.module';
 
 @Injectable()
 export class HomeCompletionService {
@@ -26,7 +26,13 @@ export class HomeCompletionService {
     const record = await this.homeCompletionRepository.findById(id);
     if (!record) {
       const end = new Date();
-      this.tracer.sendErrorSpan(traceId, op, 'Home completion not found', start, end);
+      this.tracer.sendErrorSpan(
+        traceId,
+        op,
+        'Home completion not found',
+        start,
+        end,
+      );
       throw new NotFoundError('Home completion');
     }
     const end = new Date();
@@ -98,10 +104,19 @@ export class HomeCompletionService {
   ): Promise<HomeCompletion> {
     const start = new Date();
     const op = `update_home_completion by id: ${id}`;
-    const record = await this.homeCompletionRepository.findOneAndUpdate(id, args);
+    const record = await this.homeCompletionRepository.findOneAndUpdate(
+      id,
+      args,
+    );
     if (!record) {
       const end = new Date();
-      this.tracer.sendErrorSpan(traceId, op, 'Home completion not found', start, end);
+      this.tracer.sendErrorSpan(
+        traceId,
+        op,
+        'Home completion not found',
+        start,
+        end,
+      );
       throw new NotFoundError('Home completion');
     }
     const end = new Date();
@@ -115,7 +130,13 @@ export class HomeCompletionService {
     const completion = await this.homeCompletionRepository.findById(id);
     if (!completion) {
       const end = new Date();
-      this.tracer.sendErrorSpan(traceId, op, 'Home completion not found', start, end);
+      this.tracer.sendErrorSpan(
+        traceId,
+        op,
+        'Home completion not found',
+        start,
+        end,
+      );
       throw new NotFoundError('Home completion');
     }
 

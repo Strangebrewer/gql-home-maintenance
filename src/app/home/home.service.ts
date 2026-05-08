@@ -5,7 +5,7 @@ import { HomeEntity } from './models/home.entity';
 import { CreateHomeArgs, Home, UpdateHomeArgs } from './models/home.model';
 import { HomeRepository } from './home.repository';
 import { NotFoundError } from '../../common/errors';
-import { TRACER_CLIENT, TracerClient } from 'src/shared/tracer/tracer.module';
+import { TRACER_CLIENT, TracerClient } from '../../shared/tracer/tracer.module';
 
 @Injectable()
 export class HomeService {

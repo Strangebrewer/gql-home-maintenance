@@ -12,7 +12,7 @@ import {
 } from './models/service_record.model';
 import { ServiceRecordRepository } from './service_record.repository';
 import { NotFoundError } from '../../common/errors';
-import { TRACER_CLIENT, TracerClient } from 'src/shared/tracer/tracer.module';
+import { TRACER_CLIENT, TracerClient } from '../../shared/tracer/tracer.module';
 
 @Injectable()
 export class ServiceRecordService {
@@ -27,7 +27,13 @@ export class ServiceRecordService {
     const record = await this.serviceRecordRepository.findById(id);
     if (!record) {
       const end = new Date();
-      this.tracer.sendErrorSpan(traceId, op, 'Service record not found', start, end);
+      this.tracer.sendErrorSpan(
+        traceId,
+        op,
+        'Service record not found',
+        start,
+        end,
+      );
       throw new NotFoundError('Service record');
     }
     const end = new Date();
@@ -73,10 +79,19 @@ export class ServiceRecordService {
   ): Promise<ServiceRecord> {
     const start = new Date();
     const op = `update_service_record by id: ${id}`;
-    const record = await this.serviceRecordRepository.findOneAndUpdate(id, args);
+    const record = await this.serviceRecordRepository.findOneAndUpdate(
+      id,
+      args,
+    );
     if (!record) {
       const end = new Date();
-      this.tracer.sendErrorSpan(traceId, op, 'Service record not found', start, end);
+      this.tracer.sendErrorSpan(
+        traceId,
+        op,
+        'Service record not found',
+        start,
+        end,
+      );
       throw new NotFoundError('Service record');
     }
     const end = new Date();
