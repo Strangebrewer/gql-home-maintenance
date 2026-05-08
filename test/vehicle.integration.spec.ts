@@ -4,6 +4,7 @@ import { Db, MongoClient } from 'mongodb';
 import { VEHICLE_COLLECTION } from '../src/common/factory/vehicle.factory';
 import { VehicleRepository } from '../src/app/vehicle/vehicle.repository';
 import { VehicleService } from '../src/app/vehicle/vehicle.service';
+import { TRACER_CLIENT } from '../src/shared/tracer/tracer.module';
 
 describe('Vehicle (integration)', () => {
   let container: StartedMongoDBContainer;
@@ -20,6 +21,7 @@ describe('Vehicle (integration)', () => {
     module = await Test.createTestingModule({
       providers: [
         { provide: VEHICLE_COLLECTION, useValue: db.collection('vehicles') },
+        { provide: TRACER_CLIENT, useValue: { send: jest.fn(), sendSpan: jest.fn(), sendErrorSpan: jest.fn() } },
         VehicleRepository,
         VehicleService,
       ],

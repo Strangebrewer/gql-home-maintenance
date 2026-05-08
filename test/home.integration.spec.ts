@@ -4,6 +4,7 @@ import { Db, MongoClient } from 'mongodb';
 import { HOME_COLLECTION } from '../src/common/factory/home.factory';
 import { HomeRepository } from '../src/app/home/home.repository';
 import { HomeService } from '../src/app/home/home.service';
+import { TRACER_CLIENT } from '../src/shared/tracer/tracer.module';
 
 describe('Home (integration)', () => {
   let container: StartedMongoDBContainer;
@@ -20,6 +21,7 @@ describe('Home (integration)', () => {
     module = await Test.createTestingModule({
       providers: [
         { provide: HOME_COLLECTION, useValue: db.collection('homes') },
+        { provide: TRACER_CLIENT, useValue: { send: jest.fn(), sendSpan: jest.fn(), sendErrorSpan: jest.fn() } },
         HomeRepository,
         HomeService,
       ],

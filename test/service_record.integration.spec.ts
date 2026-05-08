@@ -5,6 +5,7 @@ import { ServiceRecordType } from '../src/app/service_record/models/service_reco
 import { SERVICE_RECORD_COLLECTION } from '../src/common/factory/service_record.factory';
 import { ServiceRecordRepository } from '../src/app/service_record/service_record.repository';
 import { ServiceRecordService } from '../src/app/service_record/service_record.service';
+import { TRACER_CLIENT } from '../src/shared/tracer/tracer.module';
 
 describe('ServiceRecord (integration)', () => {
   let container: StartedMongoDBContainer;
@@ -21,6 +22,7 @@ describe('ServiceRecord (integration)', () => {
     module = await Test.createTestingModule({
       providers: [
         { provide: SERVICE_RECORD_COLLECTION, useValue: db.collection('service_records') },
+        { provide: TRACER_CLIENT, useValue: { send: jest.fn(), sendSpan: jest.fn(), sendErrorSpan: jest.fn() } },
         ServiceRecordRepository,
         ServiceRecordService,
       ],

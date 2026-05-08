@@ -8,6 +8,7 @@ import { HomeTaskRepository } from '../src/app/home_task/home_task.repository';
 import { HOME_COMPLETION_COLLECTION } from '../src/common/factory/home_completion.factory';
 import { HomeCompletionRepository } from '../src/app/home_completion/home_completion.repository';
 import { HomeCompletionService } from '../src/app/home_completion/home_completion.service';
+import { TRACER_CLIENT } from '../src/shared/tracer/tracer.module';
 
 describe('HomeCompletion (integration)', () => {
   let container: StartedMongoDBContainer;
@@ -26,6 +27,7 @@ describe('HomeCompletion (integration)', () => {
       providers: [
         { provide: HOME_TASK_COLLECTION, useValue: db.collection('home_tasks') },
         { provide: HOME_COMPLETION_COLLECTION, useValue: db.collection('home_completions') },
+        { provide: TRACER_CLIENT, useValue: { send: jest.fn(), sendSpan: jest.fn(), sendErrorSpan: jest.fn() } },
         HomeTaskRepository,
         HomeCompletionRepository,
         HomeCompletionService,

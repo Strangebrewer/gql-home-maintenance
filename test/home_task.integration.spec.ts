@@ -5,6 +5,7 @@ import { HomeTaskFrequency } from '../src/app/home_task/models/home_task.entity'
 import { HOME_TASK_COLLECTION } from '../src/common/factory/home_task.factory';
 import { HomeTaskRepository } from '../src/app/home_task/home_task.repository';
 import { HomeTaskService } from '../src/app/home_task/home_task.service';
+import { TRACER_CLIENT } from '../src/shared/tracer/tracer.module';
 
 describe('HomeTask (integration)', () => {
   let container: StartedMongoDBContainer;
@@ -21,6 +22,7 @@ describe('HomeTask (integration)', () => {
     module = await Test.createTestingModule({
       providers: [
         { provide: HOME_TASK_COLLECTION, useValue: db.collection('home_tasks') },
+        { provide: TRACER_CLIENT, useValue: { send: jest.fn(), sendSpan: jest.fn(), sendErrorSpan: jest.fn() } },
         HomeTaskRepository,
         HomeTaskService,
       ],
