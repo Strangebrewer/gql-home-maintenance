@@ -24,7 +24,7 @@ export class ServiceRecord {
 
 @ArgsType()
 export class CreateServiceRecordArgs {
-  vehicleId: string;
+  id: string;
   @Field(() => ServiceRecordType)
   type: ServiceRecordType;
   date: string;

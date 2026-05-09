@@ -17,7 +17,7 @@ export class HomeCompletion {
 
 @ArgsType()
 export class CreateHomeCompletionArgs {
-  taskId: string;
+  id: string;
   date: string;
   cost?: number;
   notes?: string;

@@ -13,6 +13,8 @@ import { HomeModule } from './app/home/home.module';
 import { HomeTaskModule } from './app/home_task/home_task.module';
 import { ServiceRecordModule } from './app/service_record/service_record.module';
 import { VehicleModule } from './app/vehicle/vehicle.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { TraceInterceptor } from './common/interceptors/trace.interceptor';
 
 @Module({
   imports: [
@@ -23,6 +25,7 @@ import { VehicleModule } from './app/vehicle/vehicle.module';
     }),
     LoggerModule.forRoot({
       pinoHttp: {
+        autoLogging: false,
         transport:
           process.env.NODE_ENV !== 'production'
             ? { target: 'pino-pretty' }
@@ -39,6 +42,12 @@ import { VehicleModule } from './app/vehicle/vehicle.module';
     HomeModule,
     HomeTaskModule,
     HomeCompletionModule,
+  ],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TraceInterceptor,
+    },
   ],
 })
 export class AppModule {}

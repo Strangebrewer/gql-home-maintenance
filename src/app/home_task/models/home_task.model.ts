@@ -3,7 +3,7 @@ import { HomeTaskFrequency } from './home_task.entity';
 
 @ArgsType()
 export class GetHomeTasksArgs {
-  homeId: string;
+  id: string;
   @Field(() => HomeTaskFrequency, { nullable: true })
   frequency?: HomeTaskFrequency;
 }
@@ -29,7 +29,7 @@ export class HomeTask {
 
 @ArgsType()
 export class CreateHomeTaskArgs {
-  homeId: string;
+  id: string;
   name: string;
   @Field(() => HomeTaskFrequency)
   frequency: HomeTaskFrequency;

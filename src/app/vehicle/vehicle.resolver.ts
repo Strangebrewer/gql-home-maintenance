@@ -11,7 +11,6 @@ import {
   UpdateVehicleArgs,
 } from './models/vehicle.model';
 import { VehicleService } from './vehicle.service';
-import { TraceId } from 'src/common/decorators/trace-id.decorator';
 
 @Resolver(() => Vehicle)
 export class VehicleResolver {
@@ -19,48 +18,37 @@ export class VehicleResolver {
 
   @Query(() => Vehicle)
   @UseGuards(JwtAccessGuard)
-  async getVehicle(
-    @TraceId() traceId: string,
-    @Args('id') id: string,
-  ): Promise<Vehicle> {
-    return this.vehicleService.findById(id, traceId);
+  async getVehicle(@Args('id') id: string): Promise<Vehicle> {
+    return this.vehicleService.findById(id);
   }
 
   @Query(() => [Vehicle])
   @UseGuards(JwtAccessGuard)
-  async getVehicles(
-    @TraceId() traceId: string,
-    @JwtUserId() userId: string,
-  ): Promise<Vehicle[]> {
-    return this.vehicleService.find(userId, traceId);
+  async getVehicles(@JwtUserId() userId: string): Promise<Vehicle[]> {
+    return this.vehicleService.find(userId);
   }
 
   @Mutation(() => Vehicle)
   @UseGuards(JwtAccessGuard)
   async createVehicle(
-    @TraceId() traceId: string,
     @JwtUserId() userId: string,
     @Args() args: CreateVehicleArgs,
   ): Promise<Vehicle> {
-    return this.vehicleService.create(args, userId, traceId);
+    return this.vehicleService.create(args, userId);
   }
 
   @Mutation(() => Vehicle)
   @UseGuards(JwtAccessGuard)
   async updateVehicle(
-    @TraceId() traceId: string,
     @Args('id') id: string,
     @Args() args: UpdateVehicleArgs,
   ): Promise<Vehicle> {
-    return this.vehicleService.update(id, args, traceId);
+    return this.vehicleService.update(id, args);
   }
 
   @Mutation(() => DeleteResult)
   @UseGuards(JwtAccessGuard)
-  async deleteVehicle(
-    @TraceId() traceId: string,
-    @Args('id') id: string,
-  ): Promise<DeleteResult> {
-    return this.vehicleService.delete(id, traceId);
+  async deleteVehicle(@Args('id') id: string): Promise<DeleteResult> {
+    return this.vehicleService.delete(id);
   }
 }

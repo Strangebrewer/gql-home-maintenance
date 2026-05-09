@@ -19,11 +19,10 @@ import {
   UpdateServiceRecordArgs,
 } from './models/service_record.model';
 import { ServiceRecordService } from './service_record.service';
-import { TraceId } from 'src/common/decorators/trace-id.decorator';
 
 @ArgsType()
 class GetServiceRecordsArgs {
-  vehicleId: string;
+  id: string;
   @Field(() => ServiceRecordType, { nullable: true })
   type?: ServiceRecordType;
 }
@@ -34,48 +33,39 @@ export class ServiceRecordResolver {
 
   @Query(() => ServiceRecord)
   @UseGuards(JwtAccessGuard)
-  async getServiceRecord(
-    @TraceId() traceId: string,
-    @Args('id') id: string,
-  ): Promise<ServiceRecord> {
-    return this.serviceRecordService.findById(id, traceId);
+  async getServiceRecord(@Args('id') id: string): Promise<ServiceRecord> {
+    return this.serviceRecordService.findById(id);
   }
 
   @Query(() => [ServiceRecord])
   @UseGuards(JwtAccessGuard)
   async getServiceRecords(
-    @TraceId() traceId: string,
     @Args() args: GetServiceRecordsArgs,
   ): Promise<ServiceRecord[]> {
-    return this.serviceRecordService.find(args.vehicleId, args.type, traceId);
+    return this.serviceRecordService.find(args.id, args.type);
   }
 
   @Mutation(() => ServiceRecord)
   @UseGuards(JwtAccessGuard)
   async createServiceRecord(
-    @TraceId() traceId: string,
     @JwtUserId() userId: string,
     @Args() args: CreateServiceRecordArgs,
   ): Promise<ServiceRecord> {
-    return this.serviceRecordService.create(args, userId, traceId);
+    return this.serviceRecordService.create(args, userId);
   }
 
   @Mutation(() => ServiceRecord)
   @UseGuards(JwtAccessGuard)
   async updateServiceRecord(
-    @TraceId() traceId: string,
     @Args('id') id: string,
     @Args() args: UpdateServiceRecordArgs,
   ): Promise<ServiceRecord> {
-    return this.serviceRecordService.update(id, args, traceId);
+    return this.serviceRecordService.update(id, args);
   }
 
   @Mutation(() => DeleteResult)
   @UseGuards(JwtAccessGuard)
-  async deleteServiceRecord(
-    @TraceId() traceId: string,
-    @Args('id') id: string,
-  ): Promise<DeleteResult> {
-    return this.serviceRecordService.delete(id, traceId);
+  async deleteServiceRecord(@Args('id') id: string): Promise<DeleteResult> {
+    return this.serviceRecordService.delete(id);
   }
 }

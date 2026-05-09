@@ -11,7 +11,6 @@ import {
   UpdateHomeCompletionArgs,
 } from './models/home_completion.model';
 import { HomeCompletionService } from './home_completion.service';
-import { TraceId } from 'src/common/decorators/trace-id.decorator';
 
 @Resolver(() => HomeCompletion)
 export class HomeCompletionResolver {
@@ -19,57 +18,47 @@ export class HomeCompletionResolver {
 
   @Query(() => HomeCompletion)
   @UseGuards(JwtAccessGuard)
-  async getHomeCompletion(
-    @TraceId() traceId: string,
-    @Args('id') id: string,
-  ): Promise<HomeCompletion> {
-    return this.homeCompletionService.findById(id, traceId);
+  async getHomeCompletion(@Args('id') id: string): Promise<HomeCompletion> {
+    return this.homeCompletionService.findById(id);
   }
 
   @Query(() => [HomeCompletion])
   @UseGuards(JwtAccessGuard)
   async getHomeCompletionsByTask(
-    @TraceId() traceId: string,
-    @Args('taskId') taskId: string,
+    @Args('id') id: string,
   ): Promise<HomeCompletion[]> {
-    return this.homeCompletionService.findByTask(taskId, traceId);
+    return this.homeCompletionService.findByTask(id);
   }
 
   @Query(() => [HomeCompletion])
   @UseGuards(JwtAccessGuard)
   async getHomeCompletionsByHome(
-    @TraceId() traceId: string,
-    @Args('homeId') homeId: string,
+    @Args('id') id: string,
   ): Promise<HomeCompletion[]> {
-    return this.homeCompletionService.findByHome(homeId, traceId);
+    return this.homeCompletionService.findByHome(id);
   }
 
   @Mutation(() => HomeCompletion)
   @UseGuards(JwtAccessGuard)
   async createHomeCompletion(
-    @TraceId() traceId: string,
     @JwtUserId() userId: string,
     @Args() args: CreateHomeCompletionArgs,
   ): Promise<HomeCompletion> {
-    return this.homeCompletionService.create(args, userId, traceId);
+    return this.homeCompletionService.create(args, userId);
   }
 
   @Mutation(() => HomeCompletion)
   @UseGuards(JwtAccessGuard)
   async updateHomeCompletion(
-    @TraceId() traceId: string,
     @Args('id') id: string,
     @Args() args: UpdateHomeCompletionArgs,
   ): Promise<HomeCompletion> {
-    return this.homeCompletionService.update(id, args, traceId);
+    return this.homeCompletionService.update(id, args);
   }
 
   @Mutation(() => DeleteResult)
   @UseGuards(JwtAccessGuard)
-  async deleteHomeCompletion(
-    @TraceId() traceId: string,
-    @Args('id') id: string,
-  ): Promise<DeleteResult> {
-    return this.homeCompletionService.delete(id, traceId);
+  async deleteHomeCompletion(@Args('id') id: string): Promise<DeleteResult> {
+    return this.homeCompletionService.delete(id);
   }
 }
