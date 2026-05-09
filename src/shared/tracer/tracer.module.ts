@@ -3,9 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import { TracerConfig } from 'src/config/tracer';
 import { Logger } from '@nestjs/common';
 
-// inside useFactory:
-const logger = new Logger('TracerModule');
-
 type Span = {
   traceId: string;
   spanId: string;
