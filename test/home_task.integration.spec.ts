@@ -51,7 +51,7 @@ describe('HomeTask (integration)', () => {
     const userId = 'user-1';
     const created = await service.create(
       {
-        id: 'home-123',
+        homeId: 'home-123',
         name: 'Service HVAC',
         frequency: HomeTaskFrequency.ANNUAL,
       },
@@ -71,7 +71,7 @@ describe('HomeTask (integration)', () => {
   it('finds all tasks for a home', async () => {
     await service.create(
       {
-        id: 'home-123',
+        homeId: 'home-123',
         name: 'Clean gutters',
         frequency: HomeTaskFrequency.SEASONAL,
       },
@@ -79,7 +79,7 @@ describe('HomeTask (integration)', () => {
     );
     await service.create(
       {
-        id: 'home-123',
+        homeId: 'home-123',
         name: 'Change HVAC filter',
         frequency: HomeTaskFrequency.MONTHLY,
       },
@@ -87,7 +87,7 @@ describe('HomeTask (integration)', () => {
     );
     await service.create(
       {
-        id: 'home-456',
+        homeId: 'home-456',
         name: 'Inspect roof',
         frequency: HomeTaskFrequency.ANNUAL,
       },
@@ -101,7 +101,7 @@ describe('HomeTask (integration)', () => {
   it('filters tasks by frequency', async () => {
     await service.create(
       {
-        id: 'home-123',
+        homeId: 'home-123',
         name: 'Change HVAC filter',
         frequency: HomeTaskFrequency.MONTHLY,
       },
@@ -109,7 +109,7 @@ describe('HomeTask (integration)', () => {
     );
     await service.create(
       {
-        id: 'home-123',
+        homeId: 'home-123',
         name: 'Clean gutters',
         frequency: HomeTaskFrequency.SEASONAL,
       },
@@ -117,7 +117,7 @@ describe('HomeTask (integration)', () => {
     );
     await service.create(
       {
-        id: 'home-123',
+        homeId: 'home-123',
         name: 'Service HVAC',
         frequency: HomeTaskFrequency.ANNUAL,
       },
@@ -132,7 +132,7 @@ describe('HomeTask (integration)', () => {
   it('updates a home task', async () => {
     const created = await service.create(
       {
-        id: 'home-123',
+        homeId: 'home-123',
         name: 'Service HVAC',
         frequency: HomeTaskFrequency.ANNUAL,
       },
@@ -152,7 +152,7 @@ describe('HomeTask (integration)', () => {
   it('deletes a home task', async () => {
     const created = await service.create(
       {
-        id: 'home-123',
+        homeId: 'home-123',
         name: 'Service HVAC',
         frequency: HomeTaskFrequency.ANNUAL,
       },

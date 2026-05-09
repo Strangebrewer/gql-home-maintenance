@@ -31,10 +31,8 @@ export class HomeTaskService {
   }
 
   async create(args: CreateHomeTaskArgs, userId: string): Promise<HomeTask> {
-    const { id: homeId, ...rest } = args;
     const entity: HomeTaskEntity = {
-      ...rest,
-      homeId,
+      ...args,
       userId,
       _id: randomUUID(),
     };

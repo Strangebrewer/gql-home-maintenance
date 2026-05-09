@@ -29,7 +29,7 @@ export class HomeTask {
 
 @ArgsType()
 export class CreateHomeTaskArgs {
-  id: string;
+  homeId: string;
   name: string;
   @Field(() => HomeTaskFrequency)
   frequency: HomeTaskFrequency;

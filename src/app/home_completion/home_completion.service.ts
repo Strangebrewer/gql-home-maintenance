@@ -40,15 +40,13 @@ export class HomeCompletionService {
     args: CreateHomeCompletionArgs,
     userId: string,
   ): Promise<HomeCompletion> {
-    const { id: taskId, ...rest } = args;
-    const task = await this.homeTaskRepository.findById(taskId);
+    const task = await this.homeTaskRepository.findById(args.taskId);
     if (!task) {
       throw new NotFoundError('Home task');
     }
 
     const entity: HomeCompletionEntity = {
-      ...rest,
-      taskId,
+      ...args,
       userId,
       homeId: task.homeId,
       _id: randomUUID(),
@@ -56,7 +54,7 @@ export class HomeCompletionService {
     const record = await this.homeCompletionRepository.create(entity);
 
     if (!task.lastCompletionDate || args.date > task.lastCompletionDate) {
-      await this.homeTaskRepository.findOneAndUpdate(taskId, {
+      await this.homeTaskRepository.findOneAndUpdate(args.taskId, {
         lastCompletionDate: args.date,
       });
     }

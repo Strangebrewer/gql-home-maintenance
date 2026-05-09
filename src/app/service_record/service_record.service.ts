@@ -39,10 +39,8 @@ export class ServiceRecordService {
     args: CreateServiceRecordArgs,
     userId: string,
   ): Promise<ServiceRecord> {
-    const { id: vehicleId, ...rest } = args;
     const entity: ServiceRecordEntity = {
-      ...rest,
-      vehicleId,
+      ...args,
       userId,
       _id: randomUUID(),
     };

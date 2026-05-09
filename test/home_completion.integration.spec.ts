@@ -72,7 +72,7 @@ describe('HomeCompletion (integration)', () => {
     const task = await createTask();
     const userId = 'user-1';
     const created = await service.create(
-      { id: task._id, date: '2024-09-15', cost: 150 },
+      { taskId: task._id, date: '2024-09-15', cost: 150 },
       userId,
     );
 
@@ -90,7 +90,7 @@ describe('HomeCompletion (integration)', () => {
   it('populates homeId from task', async () => {
     const task = await createTask('home-999');
     const created = await service.create(
-      { id: task._id, date: '2024-09-15' },
+      { taskId: task._id, date: '2024-09-15' },
       'user-1',
     );
     expect(created.homeId).toBe('home-999');
@@ -98,8 +98,8 @@ describe('HomeCompletion (integration)', () => {
 
   it('finds completions by task', async () => {
     const task = await createTask();
-    await service.create({ id: task._id, date: '2023-09-15' }, 'user-1');
-    await service.create({ id: task._id, date: '2024-09-15' }, 'user-1');
+    await service.create({ taskId: task._id, date: '2023-09-15' }, 'user-1');
+    await service.create({ taskId: task._id, date: '2024-09-15' }, 'user-1');
 
     const results = await service.findByTask(task._id);
     expect(results).toHaveLength(2);
@@ -110,9 +110,9 @@ describe('HomeCompletion (integration)', () => {
     const task2 = await createTask('home-123');
     const otherTask = await createTask('home-456');
 
-    await service.create({ id: task1._id, date: '2024-01-01' }, 'user-1');
-    await service.create({ id: task2._id, date: '2024-06-01' }, 'user-1');
-    await service.create({ id: otherTask._id, date: '2024-01-01' }, 'user-1');
+    await service.create({ taskId: task1._id, date: '2024-01-01' }, 'user-1');
+    await service.create({ taskId: task2._id, date: '2024-06-01' }, 'user-1');
+    await service.create({ taskId: otherTask._id, date: '2024-01-01' }, 'user-1');
 
     const results = await service.findByHome('home-123');
     expect(results).toHaveLength(2);
@@ -120,14 +120,14 @@ describe('HomeCompletion (integration)', () => {
 
   it('throws when task not found during create', async () => {
     await expect(
-      service.create({ id: 'nonexistent', date: '2024-09-15' }, 'user-1'),
+      service.create({ taskId: 'nonexistent', date: '2024-09-15' }, 'user-1'),
     ).rejects.toThrow('Home task not found');
   });
 
   it('updates a completion', async () => {
     const task = await createTask();
     const created = await service.create(
-      { id: task._id, date: '2024-09-15' },
+      { taskId: task._id, date: '2024-09-15' },
       'user-1',
     );
     const updated = await service.update(created.id, {
@@ -142,7 +142,7 @@ describe('HomeCompletion (integration)', () => {
   it('deletes a completion', async () => {
     const task = await createTask();
     const created = await service.create(
-      { id: task._id, date: '2024-09-15' },
+      { taskId: task._id, date: '2024-09-15' },
       'user-1',
     );
     const result = await service.delete(created.id);

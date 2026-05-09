@@ -51,7 +51,7 @@ describe('ServiceRecord (integration)', () => {
     const userId = 'user-1';
     const created = await service.create(
       {
-        id: 'vehicle-123',
+        vehicleId: 'vehicle-123',
         type: ServiceRecordType.OIL_CHANGE,
         date: '2024-03-15',
         mileage: 45000,
@@ -74,7 +74,7 @@ describe('ServiceRecord (integration)', () => {
   it('creates a service item with name and description', async () => {
     const created = await service.create(
       {
-        id: 'vehicle-123',
+        vehicleId: 'vehicle-123',
         type: ServiceRecordType.SERVICE_ITEM,
         date: '2024-06-01',
         mileage: 48000,
@@ -93,7 +93,7 @@ describe('ServiceRecord (integration)', () => {
   it('finds all records for a vehicle', async () => {
     await service.create(
       {
-        id: 'vehicle-123',
+        vehicleId: 'vehicle-123',
         type: ServiceRecordType.OIL_CHANGE,
         date: '2024-01-01',
         mileage: 40000,
@@ -102,7 +102,7 @@ describe('ServiceRecord (integration)', () => {
     );
     await service.create(
       {
-        id: 'vehicle-123',
+        vehicleId: 'vehicle-123',
         type: ServiceRecordType.TIRE_ROTATION,
         date: '2024-01-01',
         mileage: 40000,
@@ -111,7 +111,7 @@ describe('ServiceRecord (integration)', () => {
     );
     await service.create(
       {
-        id: 'vehicle-456',
+        vehicleId: 'vehicle-456',
         type: ServiceRecordType.OIL_CHANGE,
         date: '2024-01-01',
         mileage: 20000,
@@ -126,7 +126,7 @@ describe('ServiceRecord (integration)', () => {
   it('filters records by type', async () => {
     await service.create(
       {
-        id: 'vehicle-123',
+        vehicleId: 'vehicle-123',
         type: ServiceRecordType.OIL_CHANGE,
         date: '2024-01-01',
         mileage: 40000,
@@ -135,7 +135,7 @@ describe('ServiceRecord (integration)', () => {
     );
     await service.create(
       {
-        id: 'vehicle-123',
+        vehicleId: 'vehicle-123',
         type: ServiceRecordType.TIRE_ROTATION,
         date: '2024-03-01',
         mileage: 41000,
@@ -144,7 +144,7 @@ describe('ServiceRecord (integration)', () => {
     );
     await service.create(
       {
-        id: 'vehicle-123',
+        vehicleId: 'vehicle-123',
         type: ServiceRecordType.OIL_CHANGE,
         date: '2024-06-01',
         mileage: 45000,
@@ -162,7 +162,7 @@ describe('ServiceRecord (integration)', () => {
   it('updates a service record', async () => {
     const created = await service.create(
       {
-        id: 'vehicle-123',
+        vehicleId: 'vehicle-123',
         type: ServiceRecordType.OIL_CHANGE,
         date: '2024-03-15',
         mileage: 45000,
@@ -177,7 +177,7 @@ describe('ServiceRecord (integration)', () => {
   it('deletes a service record', async () => {
     const created = await service.create(
       {
-        id: 'vehicle-123',
+        vehicleId: 'vehicle-123',
         type: ServiceRecordType.OIL_CHANGE,
         date: '2024-03-15',
         mileage: 45000,
