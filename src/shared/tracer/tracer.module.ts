@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TracerConfig } from 'src/config/tracer';
-import { Logger } from '@nestjs/common';
 
 type Span = {
   traceId: string;
@@ -40,9 +39,6 @@ export const tracerFactory = {
   provide: TRACER_CLIENT,
   useFactory: async (configSvc: ConfigService) => {
     const { service, serviceKey, url } = configSvc.get<TracerConfig>('tracer');
-    const logger = new Logger('TracerModule');
-
-    logger.log(`tracer service url::: ${url}`);
 
     async function send(span: Span) {
       fetch(url + '/spans', {
