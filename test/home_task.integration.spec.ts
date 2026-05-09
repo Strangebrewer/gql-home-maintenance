@@ -1,11 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MongoDBContainer, StartedMongoDBContainer } from '@testcontainers/mongodb';
+import {
+  MongoDBContainer,
+  StartedMongoDBContainer,
+} from '@testcontainers/mongodb';
 import { Db, MongoClient } from 'mongodb';
 import { HomeTaskFrequency } from '../src/app/home_task/models/home_task.entity';
 import { HOME_TASK_COLLECTION } from '../src/common/factory/home_task.factory';
 import { HomeTaskRepository } from '../src/app/home_task/home_task.repository';
 import { HomeTaskService } from '../src/app/home_task/home_task.service';
-import { TRACER_CLIENT } from '../src/shared/tracer/tracer.module';
 
 describe('HomeTask (integration)', () => {
   let container: StartedMongoDBContainer;
@@ -16,13 +18,17 @@ describe('HomeTask (integration)', () => {
 
   beforeAll(async () => {
     container = await new MongoDBContainer('mongo:6').start();
-    client = await MongoClient.connect(container.getConnectionString(), { directConnection: true });
+    client = await MongoClient.connect(container.getConnectionString(), {
+      directConnection: true,
+    });
     db = client.db('test');
 
     module = await Test.createTestingModule({
       providers: [
-        { provide: HOME_TASK_COLLECTION, useValue: db.collection('home_tasks') },
-        { provide: TRACER_CLIENT, useValue: { send: jest.fn(), sendSpan: jest.fn(), sendErrorSpan: jest.fn() } },
+        {
+          provide: HOME_TASK_COLLECTION,
+          useValue: db.collection('home_tasks'),
+        },
         HomeTaskRepository,
         HomeTaskService,
       ],
@@ -44,7 +50,11 @@ describe('HomeTask (integration)', () => {
   it('creates and retrieves a home task', async () => {
     const userId = 'user-1';
     const created = await service.create(
-      { homeId: 'home-123', name: 'Service HVAC', frequency: HomeTaskFrequency.ANNUAL },
+      {
+        id: 'home-123',
+        name: 'Service HVAC',
+        frequency: HomeTaskFrequency.ANNUAL,
+      },
       userId,
     );
 
@@ -59,18 +69,60 @@ describe('HomeTask (integration)', () => {
   });
 
   it('finds all tasks for a home', async () => {
-    await service.create({ homeId: 'home-123', name: 'Clean gutters', frequency: HomeTaskFrequency.SEASONAL }, 'user-1');
-    await service.create({ homeId: 'home-123', name: 'Change HVAC filter', frequency: HomeTaskFrequency.MONTHLY }, 'user-1');
-    await service.create({ homeId: 'home-456', name: 'Inspect roof', frequency: HomeTaskFrequency.ANNUAL }, 'user-1');
+    await service.create(
+      {
+        id: 'home-123',
+        name: 'Clean gutters',
+        frequency: HomeTaskFrequency.SEASONAL,
+      },
+      'user-1',
+    );
+    await service.create(
+      {
+        id: 'home-123',
+        name: 'Change HVAC filter',
+        frequency: HomeTaskFrequency.MONTHLY,
+      },
+      'user-1',
+    );
+    await service.create(
+      {
+        id: 'home-456',
+        name: 'Inspect roof',
+        frequency: HomeTaskFrequency.ANNUAL,
+      },
+      'user-1',
+    );
 
     const results = await service.find('home-123');
     expect(results).toHaveLength(2);
   });
 
   it('filters tasks by frequency', async () => {
-    await service.create({ homeId: 'home-123', name: 'Change HVAC filter', frequency: HomeTaskFrequency.MONTHLY }, 'user-1');
-    await service.create({ homeId: 'home-123', name: 'Clean gutters', frequency: HomeTaskFrequency.SEASONAL }, 'user-1');
-    await service.create({ homeId: 'home-123', name: 'Service HVAC', frequency: HomeTaskFrequency.ANNUAL }, 'user-1');
+    await service.create(
+      {
+        id: 'home-123',
+        name: 'Change HVAC filter',
+        frequency: HomeTaskFrequency.MONTHLY,
+      },
+      'user-1',
+    );
+    await service.create(
+      {
+        id: 'home-123',
+        name: 'Clean gutters',
+        frequency: HomeTaskFrequency.SEASONAL,
+      },
+      'user-1',
+    );
+    await service.create(
+      {
+        id: 'home-123',
+        name: 'Service HVAC',
+        frequency: HomeTaskFrequency.ANNUAL,
+      },
+      'user-1',
+    );
 
     const monthly = await service.find('home-123', HomeTaskFrequency.MONTHLY);
     expect(monthly).toHaveLength(1);
@@ -79,7 +131,11 @@ describe('HomeTask (integration)', () => {
 
   it('updates a home task', async () => {
     const created = await service.create(
-      { homeId: 'home-123', name: 'Service HVAC', frequency: HomeTaskFrequency.ANNUAL },
+      {
+        id: 'home-123',
+        name: 'Service HVAC',
+        frequency: HomeTaskFrequency.ANNUAL,
+      },
       'user-1',
     );
     const updated = await service.update(created.id, {
@@ -87,13 +143,19 @@ describe('HomeTask (integration)', () => {
       description: 'Annual inspection and filter replacement',
     });
     expect(updated.name).toBe('Service HVAC system');
-    expect(updated.description).toBe('Annual inspection and filter replacement');
+    expect(updated.description).toBe(
+      'Annual inspection and filter replacement',
+    );
     expect(updated.frequency).toBe(HomeTaskFrequency.ANNUAL);
   });
 
   it('deletes a home task', async () => {
     const created = await service.create(
-      { homeId: 'home-123', name: 'Service HVAC', frequency: HomeTaskFrequency.ANNUAL },
+      {
+        id: 'home-123',
+        name: 'Service HVAC',
+        frequency: HomeTaskFrequency.ANNUAL,
+      },
       'user-1',
     );
     const result = await service.delete(created.id);
@@ -101,6 +163,8 @@ describe('HomeTask (integration)', () => {
   });
 
   it('throws when home task not found', async () => {
-    await expect(service.findById('nonexistent')).rejects.toThrow('Home task not found');
+    await expect(service.findById('nonexistent')).rejects.toThrow(
+      'Home task not found',
+    );
   });
 });

@@ -1,11 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MongoDBContainer, StartedMongoDBContainer } from '@testcontainers/mongodb';
+import {
+  MongoDBContainer,
+  StartedMongoDBContainer,
+} from '@testcontainers/mongodb';
 import { Db, MongoClient } from 'mongodb';
 import { ServiceRecordType } from '../src/app/service_record/models/service_record.entity';
 import { SERVICE_RECORD_COLLECTION } from '../src/common/factory/service_record.factory';
 import { ServiceRecordRepository } from '../src/app/service_record/service_record.repository';
 import { ServiceRecordService } from '../src/app/service_record/service_record.service';
-import { TRACER_CLIENT } from '../src/shared/tracer/tracer.module';
 
 describe('ServiceRecord (integration)', () => {
   let container: StartedMongoDBContainer;
@@ -16,13 +18,17 @@ describe('ServiceRecord (integration)', () => {
 
   beforeAll(async () => {
     container = await new MongoDBContainer('mongo:6').start();
-    client = await MongoClient.connect(container.getConnectionString(), { directConnection: true });
+    client = await MongoClient.connect(container.getConnectionString(), {
+      directConnection: true,
+    });
     db = client.db('test');
 
     module = await Test.createTestingModule({
       providers: [
-        { provide: SERVICE_RECORD_COLLECTION, useValue: db.collection('service_records') },
-        { provide: TRACER_CLIENT, useValue: { send: jest.fn(), sendSpan: jest.fn(), sendErrorSpan: jest.fn() } },
+        {
+          provide: SERVICE_RECORD_COLLECTION,
+          useValue: db.collection('service_records'),
+        },
         ServiceRecordRepository,
         ServiceRecordService,
       ],
@@ -44,7 +50,13 @@ describe('ServiceRecord (integration)', () => {
   it('creates and retrieves an oil change', async () => {
     const userId = 'user-1';
     const created = await service.create(
-      { vehicleId: 'vehicle-123', type: ServiceRecordType.OIL_CHANGE, date: '2024-03-15', mileage: 45000, cost: 65 },
+      {
+        id: 'vehicle-123',
+        type: ServiceRecordType.OIL_CHANGE,
+        date: '2024-03-15',
+        mileage: 45000,
+        cost: 65,
+      },
       userId,
     );
 
@@ -62,7 +74,7 @@ describe('ServiceRecord (integration)', () => {
   it('creates a service item with name and description', async () => {
     const created = await service.create(
       {
-        vehicleId: 'vehicle-123',
+        id: 'vehicle-123',
         type: ServiceRecordType.SERVICE_ITEM,
         date: '2024-06-01',
         mileage: 48000,
@@ -79,26 +91,82 @@ describe('ServiceRecord (integration)', () => {
   });
 
   it('finds all records for a vehicle', async () => {
-    await service.create({ vehicleId: 'vehicle-123', type: ServiceRecordType.OIL_CHANGE, date: '2024-01-01', mileage: 40000 }, 'user-1');
-    await service.create({ vehicleId: 'vehicle-123', type: ServiceRecordType.TIRE_ROTATION, date: '2024-01-01', mileage: 40000 }, 'user-1');
-    await service.create({ vehicleId: 'vehicle-456', type: ServiceRecordType.OIL_CHANGE, date: '2024-01-01', mileage: 20000 }, 'user-1');
+    await service.create(
+      {
+        id: 'vehicle-123',
+        type: ServiceRecordType.OIL_CHANGE,
+        date: '2024-01-01',
+        mileage: 40000,
+      },
+      'user-1',
+    );
+    await service.create(
+      {
+        id: 'vehicle-123',
+        type: ServiceRecordType.TIRE_ROTATION,
+        date: '2024-01-01',
+        mileage: 40000,
+      },
+      'user-1',
+    );
+    await service.create(
+      {
+        id: 'vehicle-456',
+        type: ServiceRecordType.OIL_CHANGE,
+        date: '2024-01-01',
+        mileage: 20000,
+      },
+      'user-1',
+    );
 
     const results = await service.find('vehicle-123');
     expect(results).toHaveLength(2);
   });
 
   it('filters records by type', async () => {
-    await service.create({ vehicleId: 'vehicle-123', type: ServiceRecordType.OIL_CHANGE, date: '2024-01-01', mileage: 40000 }, 'user-1');
-    await service.create({ vehicleId: 'vehicle-123', type: ServiceRecordType.TIRE_ROTATION, date: '2024-03-01', mileage: 41000 }, 'user-1');
-    await service.create({ vehicleId: 'vehicle-123', type: ServiceRecordType.OIL_CHANGE, date: '2024-06-01', mileage: 45000 }, 'user-1');
+    await service.create(
+      {
+        id: 'vehicle-123',
+        type: ServiceRecordType.OIL_CHANGE,
+        date: '2024-01-01',
+        mileage: 40000,
+      },
+      'user-1',
+    );
+    await service.create(
+      {
+        id: 'vehicle-123',
+        type: ServiceRecordType.TIRE_ROTATION,
+        date: '2024-03-01',
+        mileage: 41000,
+      },
+      'user-1',
+    );
+    await service.create(
+      {
+        id: 'vehicle-123',
+        type: ServiceRecordType.OIL_CHANGE,
+        date: '2024-06-01',
+        mileage: 45000,
+      },
+      'user-1',
+    );
 
-    const oilChanges = await service.find('vehicle-123', ServiceRecordType.OIL_CHANGE);
+    const oilChanges = await service.find(
+      'vehicle-123',
+      ServiceRecordType.OIL_CHANGE,
+    );
     expect(oilChanges).toHaveLength(2);
   });
 
   it('updates a service record', async () => {
     const created = await service.create(
-      { vehicleId: 'vehicle-123', type: ServiceRecordType.OIL_CHANGE, date: '2024-03-15', mileage: 45000 },
+      {
+        id: 'vehicle-123',
+        type: ServiceRecordType.OIL_CHANGE,
+        date: '2024-03-15',
+        mileage: 45000,
+      },
       'user-1',
     );
     const updated = await service.update(created.id, { cost: 72 });
@@ -108,7 +176,12 @@ describe('ServiceRecord (integration)', () => {
 
   it('deletes a service record', async () => {
     const created = await service.create(
-      { vehicleId: 'vehicle-123', type: ServiceRecordType.OIL_CHANGE, date: '2024-03-15', mileage: 45000 },
+      {
+        id: 'vehicle-123',
+        type: ServiceRecordType.OIL_CHANGE,
+        date: '2024-03-15',
+        mileage: 45000,
+      },
       'user-1',
     );
     const result = await service.delete(created.id);
@@ -116,6 +189,8 @@ describe('ServiceRecord (integration)', () => {
   });
 
   it('throws when service record not found', async () => {
-    await expect(service.findById('nonexistent')).rejects.toThrow('Service record not found');
+    await expect(service.findById('nonexistent')).rejects.toThrow(
+      'Service record not found',
+    );
   });
 });

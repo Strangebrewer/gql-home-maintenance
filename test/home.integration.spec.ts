@@ -1,10 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MongoDBContainer, StartedMongoDBContainer } from '@testcontainers/mongodb';
+import {
+  MongoDBContainer,
+  StartedMongoDBContainer,
+} from '@testcontainers/mongodb';
 import { Db, MongoClient } from 'mongodb';
 import { HOME_COLLECTION } from '../src/common/factory/home.factory';
 import { HomeRepository } from '../src/app/home/home.repository';
 import { HomeService } from '../src/app/home/home.service';
-import { TRACER_CLIENT } from '../src/shared/tracer/tracer.module';
 
 describe('Home (integration)', () => {
   let container: StartedMongoDBContainer;
@@ -15,13 +17,14 @@ describe('Home (integration)', () => {
 
   beforeAll(async () => {
     container = await new MongoDBContainer('mongo:6').start();
-    client = await MongoClient.connect(container.getConnectionString(), { directConnection: true });
+    client = await MongoClient.connect(container.getConnectionString(), {
+      directConnection: true,
+    });
     db = client.db('test');
 
     module = await Test.createTestingModule({
       providers: [
         { provide: HOME_COLLECTION, useValue: db.collection('homes') },
-        { provide: TRACER_CLIENT, useValue: { send: jest.fn(), sendSpan: jest.fn(), sendErrorSpan: jest.fn() } },
         HomeRepository,
         HomeService,
       ],
@@ -68,7 +71,10 @@ describe('Home (integration)', () => {
 
   it('updates a home', async () => {
     const created = await service.create({ address: '123 Main St' }, 'user-1');
-    const updated = await service.update(created.id, { sqFootage: 2400, notes: 'Added sunroom' });
+    const updated = await service.update(created.id, {
+      sqFootage: 2400,
+      notes: 'Added sunroom',
+    });
     expect(updated.sqFootage).toBe(2400);
     expect(updated.notes).toBe('Added sunroom');
     expect(updated.address).toBe('123 Main St');
@@ -81,6 +87,8 @@ describe('Home (integration)', () => {
   });
 
   it('throws when home not found', async () => {
-    await expect(service.findById('nonexistent')).rejects.toThrow('Home not found');
+    await expect(service.findById('nonexistent')).rejects.toThrow(
+      'Home not found',
+    );
   });
 });
