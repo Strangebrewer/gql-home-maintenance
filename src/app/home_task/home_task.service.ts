@@ -3,9 +3,9 @@ import { Inject, Injectable } from '@nestjs/common';
 import { DeleteResult } from '../../common/models/common.model';
 import { HomeTaskEntity, HomeTaskFrequency } from './models/home_task.entity';
 import {
-  CreateHomeTaskArgs,
+  CreateHomeTaskInput,
   HomeTask,
-  UpdateHomeTaskArgs,
+  UpdateHomeTaskInput,
 } from './models/home_task.model';
 import { HomeTaskRepository } from './home_task.repository';
 import { NotFoundError } from '../../common/errors';
@@ -30,7 +30,7 @@ export class HomeTaskService {
     return records.map(mapToModel);
   }
 
-  async create(args: CreateHomeTaskArgs, userId: string): Promise<HomeTask> {
+  async create(args: CreateHomeTaskInput, userId: string): Promise<HomeTask> {
     const entity: HomeTaskEntity = {
       ...args,
       userId,
@@ -40,7 +40,7 @@ export class HomeTaskService {
     return mapToModel(record);
   }
 
-  async update(id: string, args: UpdateHomeTaskArgs): Promise<HomeTask> {
+  async update(id: string, args: UpdateHomeTaskInput): Promise<HomeTask> {
     const record = await this.homeTaskRepository.findOneAndUpdate(id, args);
     if (!record) {
       throw new NotFoundError('Home task');

@@ -1,4 +1,4 @@
-import { ArgsType, Field, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { ArgsType, Field, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { HomeTaskFrequency } from './home_task.entity';
 
 @ArgsType()
@@ -27,8 +27,8 @@ export class HomeTask {
   lastCompletionDate?: string;
 }
 
-@ArgsType()
-export class CreateHomeTaskArgs {
+@InputType()
+export class CreateHomeTaskInput {
   homeId: string;
   name: string;
   @Field(() => HomeTaskFrequency)
@@ -36,8 +36,8 @@ export class CreateHomeTaskArgs {
   description?: string;
 }
 
-@ArgsType()
-export class UpdateHomeTaskArgs {
+@InputType()
+export class UpdateHomeTaskInput {
   name?: string;
   @Field(() => HomeTaskFrequency, { nullable: true })
   frequency?: HomeTaskFrequency;

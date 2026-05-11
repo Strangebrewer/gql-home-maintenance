@@ -14,9 +14,9 @@ import {
 import { DeleteResult } from '../../common/models/common.model';
 import { ServiceRecordType } from './models/service_record.entity';
 import {
-  CreateServiceRecordArgs,
+  CreateServiceRecordInput,
   ServiceRecord,
-  UpdateServiceRecordArgs,
+  UpdateServiceRecordInput,
 } from './models/service_record.model';
 import { ServiceRecordService } from './service_record.service';
 
@@ -49,18 +49,18 @@ export class ServiceRecordResolver {
   @UseGuards(JwtAccessGuard)
   async createServiceRecord(
     @JwtUserId() userId: string,
-    @Args() args: CreateServiceRecordArgs,
+    @Args('input') input: CreateServiceRecordInput,
   ): Promise<ServiceRecord> {
-    return this.serviceRecordService.create(args, userId);
+    return this.serviceRecordService.create(input, userId);
   }
 
   @Mutation(() => ServiceRecord)
   @UseGuards(JwtAccessGuard)
   async updateServiceRecord(
     @Args('id') id: string,
-    @Args() args: UpdateServiceRecordArgs,
+    @Args('input') input: UpdateServiceRecordInput,
   ): Promise<ServiceRecord> {
-    return this.serviceRecordService.update(id, args);
+    return this.serviceRecordService.update(id, input);
   }
 
   @Mutation(() => DeleteResult)

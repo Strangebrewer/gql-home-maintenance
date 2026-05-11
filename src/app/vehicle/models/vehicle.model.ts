@@ -1,4 +1,4 @@
-import { ArgsType, Directive, ObjectType } from '@nestjs/graphql';
+import { Directive, InputType, ObjectType } from '@nestjs/graphql';
 
 // @Field() decorators are not required on these types — the @nestjs/graphql
 // CLI plugin (configured in nest-cli.json) infers them automatically from
@@ -20,8 +20,8 @@ export class Vehicle {
   insuranceId?: string;
 }
 
-@ArgsType()
-export class CreateVehicleArgs {
+@InputType()
+export class CreateVehicleInput {
   year: number;
   make: string;
   model: string;
@@ -33,8 +33,8 @@ export class CreateVehicleArgs {
   insuranceId?: string;
 }
 
-@ArgsType()
-export class UpdateVehicleArgs {
+@InputType()
+export class UpdateVehicleInput {
   year?: number;
   make?: string;
   model?: string;

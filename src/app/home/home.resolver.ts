@@ -5,7 +5,7 @@ import {
   JwtUserId,
 } from '../../common/guards/jwt-access.guard';
 import { DeleteResult } from '../../common/models/common.model';
-import { CreateHomeArgs, Home, UpdateHomeArgs } from './models/home.model';
+import { CreateHomeInput, Home, UpdateHomeInput } from './models/home.model';
 import { HomeService } from './home.service';
 
 @Resolver(() => Home)
@@ -28,18 +28,18 @@ export class HomeResolver {
   @UseGuards(JwtAccessGuard)
   async createHome(
     @JwtUserId() userId: string,
-    @Args() args: CreateHomeArgs,
+    @Args('input') input: CreateHomeInput,
   ): Promise<Home> {
-    return this.homeService.create(args, userId);
+    return this.homeService.create(input, userId);
   }
 
   @Mutation(() => Home)
   @UseGuards(JwtAccessGuard)
   async updateHome(
     @Args('id') id: string,
-    @Args() args: UpdateHomeArgs,
+    @Args('input') input: UpdateHomeInput,
   ): Promise<Home> {
-    return this.homeService.update(id, args);
+    return this.homeService.update(id, input);
   }
 
   @Mutation(() => Home)

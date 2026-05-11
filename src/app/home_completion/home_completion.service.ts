@@ -4,9 +4,9 @@ import { DeleteResult } from '../../common/models/common.model';
 import { HomeTaskRepository } from '../home_task/home_task.repository';
 import { HomeCompletionEntity } from './models/home_completion.entity';
 import {
-  CreateHomeCompletionArgs,
+  CreateHomeCompletionInput,
   HomeCompletion,
-  UpdateHomeCompletionArgs,
+  UpdateHomeCompletionInput,
 } from './models/home_completion.model';
 import { HomeCompletionRepository } from './home_completion.repository';
 import { NotFoundError } from '../../common/errors';
@@ -37,7 +37,7 @@ export class HomeCompletionService {
   }
 
   async create(
-    args: CreateHomeCompletionArgs,
+    args: CreateHomeCompletionInput,
     userId: string,
   ): Promise<HomeCompletion> {
     const task = await this.homeTaskRepository.findById(args.taskId);
@@ -64,7 +64,7 @@ export class HomeCompletionService {
 
   async update(
     id: string,
-    args: UpdateHomeCompletionArgs,
+    args: UpdateHomeCompletionInput,
   ): Promise<HomeCompletion> {
     const record = await this.homeCompletionRepository.findOneAndUpdate(
       id,

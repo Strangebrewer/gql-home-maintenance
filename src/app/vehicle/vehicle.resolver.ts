@@ -6,9 +6,9 @@ import {
 } from '../../common/guards/jwt-access.guard';
 import { DeleteResult } from '../../common/models/common.model';
 import {
-  CreateVehicleArgs,
+  CreateVehicleInput,
   Vehicle,
-  UpdateVehicleArgs,
+  UpdateVehicleInput,
 } from './models/vehicle.model';
 import { VehicleService } from './vehicle.service';
 
@@ -32,18 +32,18 @@ export class VehicleResolver {
   @UseGuards(JwtAccessGuard)
   async createVehicle(
     @JwtUserId() userId: string,
-    @Args() args: CreateVehicleArgs,
+    @Args('input') input: CreateVehicleInput,
   ): Promise<Vehicle> {
-    return this.vehicleService.create(args, userId);
+    return this.vehicleService.create(input, userId);
   }
 
   @Mutation(() => Vehicle)
   @UseGuards(JwtAccessGuard)
   async updateVehicle(
     @Args('id') id: string,
-    @Args() args: UpdateVehicleArgs,
+    @Args('input') input: UpdateVehicleInput,
   ): Promise<Vehicle> {
-    return this.vehicleService.update(id, args);
+    return this.vehicleService.update(id, input);
   }
 
   @Mutation(() => DeleteResult)

@@ -6,10 +6,10 @@ import {
 } from '../../common/guards/jwt-access.guard';
 import { DeleteResult } from '../../common/models/common.model';
 import {
-  CreateHomeTaskArgs,
+  CreateHomeTaskInput,
   GetHomeTasksArgs,
   HomeTask,
-  UpdateHomeTaskArgs,
+  UpdateHomeTaskInput,
 } from './models/home_task.model';
 import { HomeTaskService } from './home_task.service';
 
@@ -33,18 +33,18 @@ export class HomeTaskResolver {
   @UseGuards(JwtAccessGuard)
   async createHomeTask(
     @JwtUserId() userId: string,
-    @Args() args: CreateHomeTaskArgs,
+    @Args('input') input: CreateHomeTaskInput,
   ): Promise<HomeTask> {
-    return this.homeTaskService.create(args, userId);
+    return this.homeTaskService.create(input, userId);
   }
 
   @Mutation(() => HomeTask)
   @UseGuards(JwtAccessGuard)
   async updateHomeTask(
     @Args('id') id: string,
-    @Args() args: UpdateHomeTaskArgs,
+    @Args('input') input: UpdateHomeTaskInput,
   ): Promise<HomeTask> {
-    return this.homeTaskService.update(id, args);
+    return this.homeTaskService.update(id, input);
   }
 
   @Mutation(() => DeleteResult)

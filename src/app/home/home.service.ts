@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto';
 import { Inject, Injectable } from '@nestjs/common';
 import { DeleteResult } from '../../common/models/common.model';
 import { HomeEntity } from './models/home.entity';
-import { CreateHomeArgs, Home, UpdateHomeArgs } from './models/home.model';
+import { CreateHomeInput, Home, UpdateHomeInput } from './models/home.model';
 import { HomeRepository } from './home.repository';
 import { NotFoundError } from '../../common/errors';
 
@@ -23,7 +23,7 @@ export class HomeService {
     return records.map(mapToModel);
   }
 
-  async create(args: CreateHomeArgs, userId: string): Promise<Home> {
+  async create(args: CreateHomeInput, userId: string): Promise<Home> {
     const existing = await this.homeRepository.find({ userId });
     const entity: HomeEntity = {
       ...args,
@@ -43,7 +43,7 @@ export class HomeService {
     return mapToModel(record);
   }
 
-  async update(id: string, args: UpdateHomeArgs): Promise<Home> {
+  async update(id: string, args: UpdateHomeInput): Promise<Home> {
     const record = await this.homeRepository.findOneAndUpdate(id, args);
     if (!record) {
       throw new NotFoundError('Home');

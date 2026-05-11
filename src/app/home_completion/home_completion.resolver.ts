@@ -6,9 +6,9 @@ import {
 } from '../../common/guards/jwt-access.guard';
 import { DeleteResult } from '../../common/models/common.model';
 import {
-  CreateHomeCompletionArgs,
+  CreateHomeCompletionInput,
   HomeCompletion,
-  UpdateHomeCompletionArgs,
+  UpdateHomeCompletionInput,
 } from './models/home_completion.model';
 import { HomeCompletionService } from './home_completion.service';
 
@@ -42,18 +42,18 @@ export class HomeCompletionResolver {
   @UseGuards(JwtAccessGuard)
   async createHomeCompletion(
     @JwtUserId() userId: string,
-    @Args() args: CreateHomeCompletionArgs,
+    @Args('input') input: CreateHomeCompletionInput,
   ): Promise<HomeCompletion> {
-    return this.homeCompletionService.create(args, userId);
+    return this.homeCompletionService.create(input, userId);
   }
 
   @Mutation(() => HomeCompletion)
   @UseGuards(JwtAccessGuard)
   async updateHomeCompletion(
     @Args('id') id: string,
-    @Args() args: UpdateHomeCompletionArgs,
+    @Args('input') input: UpdateHomeCompletionInput,
   ): Promise<HomeCompletion> {
-    return this.homeCompletionService.update(id, args);
+    return this.homeCompletionService.update(id, input);
   }
 
   @Mutation(() => DeleteResult)

@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { DeleteResult } from '../../common/models/common.model';
 import { VehicleEntity } from './models/vehicle.entity';
 import {
-  CreateVehicleArgs,
-  UpdateVehicleArgs,
+  CreateVehicleInput,
+  UpdateVehicleInput,
   Vehicle,
 } from './models/vehicle.model';
 import { VehicleRepository } from './vehicle.repository';
@@ -27,7 +27,7 @@ export class VehicleService {
     return records.map(mapToModel);
   }
 
-  async create(args: CreateVehicleArgs, userId: string): Promise<Vehicle> {
+  async create(args: CreateVehicleInput, userId: string): Promise<Vehicle> {
     const entity: VehicleEntity = {
       ...args,
       userId,
@@ -37,7 +37,7 @@ export class VehicleService {
     return mapToModel(record);
   }
 
-  async update(id: string, args: UpdateVehicleArgs): Promise<Vehicle> {
+  async update(id: string, args: UpdateVehicleInput): Promise<Vehicle> {
     const record = await this.vehicleRepository.findOneAndUpdate(id, args);
     if (!record) {
       throw new NotFoundError('Vehicle');

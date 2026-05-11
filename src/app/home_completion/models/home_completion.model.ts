@@ -1,4 +1,4 @@
-import { ArgsType, ObjectType } from '@nestjs/graphql';
+import { InputType, ObjectType } from '@nestjs/graphql';
 
 // @Field() decorators are not required on these types — the @nestjs/graphql
 // CLI plugin (configured in nest-cli.json) infers them automatically from
@@ -15,16 +15,16 @@ export class HomeCompletion {
   notes?: string;
 }
 
-@ArgsType()
-export class CreateHomeCompletionArgs {
+@InputType()
+export class CreateHomeCompletionInput {
   taskId: string;
   date: string;
   cost?: number;
   notes?: string;
 }
 
-@ArgsType()
-export class UpdateHomeCompletionArgs {
+@InputType()
+export class UpdateHomeCompletionInput {
   date?: string;
   cost?: number;
   notes?: string;

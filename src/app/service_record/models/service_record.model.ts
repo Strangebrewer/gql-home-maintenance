@@ -1,4 +1,4 @@
-import { ArgsType, Field, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { ServiceRecordType } from './service_record.entity';
 
 // @Field() decorators are not required on these types — the @nestjs/graphql
@@ -22,8 +22,8 @@ export class ServiceRecord {
   description?: string;
 }
 
-@ArgsType()
-export class CreateServiceRecordArgs {
+@InputType()
+export class CreateServiceRecordInput {
   vehicleId: string;
   @Field(() => ServiceRecordType)
   type: ServiceRecordType;
@@ -34,8 +34,8 @@ export class CreateServiceRecordArgs {
   description?: string;
 }
 
-@ArgsType()
-export class UpdateServiceRecordArgs {
+@InputType()
+export class UpdateServiceRecordInput {
   date?: string;
   mileage?: number;
   cost?: number;

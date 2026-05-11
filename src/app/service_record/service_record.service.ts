@@ -6,9 +6,9 @@ import {
   ServiceRecordType,
 } from './models/service_record.entity';
 import {
-  CreateServiceRecordArgs,
+  CreateServiceRecordInput,
   ServiceRecord,
-  UpdateServiceRecordArgs,
+  UpdateServiceRecordInput,
 } from './models/service_record.model';
 import { ServiceRecordRepository } from './service_record.repository';
 import { NotFoundError } from '../../common/errors';
@@ -36,7 +36,7 @@ export class ServiceRecordService {
   }
 
   async create(
-    args: CreateServiceRecordArgs,
+    args: CreateServiceRecordInput,
     userId: string,
   ): Promise<ServiceRecord> {
     const entity: ServiceRecordEntity = {
@@ -50,7 +50,7 @@ export class ServiceRecordService {
 
   async update(
     id: string,
-    args: UpdateServiceRecordArgs,
+    args: UpdateServiceRecordInput,
   ): Promise<ServiceRecord> {
     const record = await this.serviceRecordRepository.findOneAndUpdate(
       id,
