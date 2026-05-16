@@ -14,6 +14,7 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 export class TraceInterceptor implements NestInterceptor {
   constructor(@Inject(TRACER_CLIENT) private readonly tracer: TracerClient) {}
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    if (context.getType<string>() !== 'graphql') return next.handle();
     const start = new Date();
     const ctx = GqlExecutionContext.create(context);
     const req = ctx.getContext().req;

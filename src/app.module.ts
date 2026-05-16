@@ -15,6 +15,7 @@ import { ServiceRecordModule } from './app/service_record/service_record.module'
 import { VehicleModule } from './app/vehicle/vehicle.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TraceInterceptor } from './common/interceptors/trace.interceptor';
+import { RubeModule } from './app/rube/rube.module';
 
 @Module({
   imports: [
@@ -30,7 +31,15 @@ import { TraceInterceptor } from './common/interceptors/trace.interceptor';
         stream: {
           write(msg: string) {
             const entry = JSON.parse(msg);
-            const internal = ['InstanceLoader', 'NestFactory', 'RouterExplorer', 'RoutesResolver', 'NestApplication', 'GraphQLModule', 'AppModule'];
+            const internal = [
+              'InstanceLoader',
+              'NestFactory',
+              'RouterExplorer',
+              'RoutesResolver',
+              'NestApplication',
+              'GraphQLModule',
+              'AppModule',
+            ];
             if (internal.includes(entry.context)) return;
             process.stdout.write(msg);
           },
@@ -47,6 +56,7 @@ import { TraceInterceptor } from './common/interceptors/trace.interceptor';
     HomeModule,
     HomeTaskModule,
     HomeCompletionModule,
+    RubeModule,
   ],
   providers: [
     {
