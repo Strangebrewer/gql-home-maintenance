@@ -6,4 +6,5 @@ export type HomeCompletionEntity = {
   date: string;
   cost?: number;
   notes?: string;
+  expiresAt?: Date;
 };

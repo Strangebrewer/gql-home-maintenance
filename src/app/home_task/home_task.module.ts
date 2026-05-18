@@ -13,6 +13,6 @@ import { HomeTaskService } from './home_task.service';
     HomeTaskResolver,
     HomeTaskService,
   ],
-  exports: [HomeTaskRepository],
+  exports: [HomeTaskRepository, HomeTaskService],
 })
 export class HomeTaskModule {}

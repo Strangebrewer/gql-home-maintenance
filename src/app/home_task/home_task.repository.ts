@@ -27,6 +27,10 @@ export class HomeTaskRepository {
     return entity;
   }
 
+  async count(filter: Filter<HomeTaskEntity>): Promise<number> {
+    return this.collection.countDocuments(filter);
+  }
+
   async findOneAndUpdate(id: string, fields: UpdateFilter<HomeTaskEntity>): Promise<HomeTaskEntity> {
     return this.collection.findOneAndUpdate(
       { [this.primaryKey]: id } as Filter<HomeTaskEntity>,

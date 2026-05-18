@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { Inject, Injectable } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { DeleteResult } from '../../common/models/common.model';
 import { HomeTaskRepository } from '../home_task/home_task.repository';
 import { HomeCompletionEntity } from './models/home_completion.entity';
@@ -39,7 +39,12 @@ export class HomeCompletionService {
   async create(
     args: CreateHomeCompletionInput,
     userId: string,
+    options?: { isDemo?: boolean; expiresAt?: Date },
   ): Promise<HomeCompletion> {
+    if (options?.isDemo) {
+      const count = await this.homeCompletionRepository.count({ taskId: args.taskId });
+      if (count >= 10) throw new ForbiddenException('demo home completion limit reached');
+    }
     const task = await this.homeTaskRepository.findById(args.taskId);
     if (!task) {
       throw new NotFoundError('Home task');
@@ -50,6 +55,7 @@ export class HomeCompletionService {
       userId,
       homeId: task.homeId,
       _id: randomUUID(),
+      ...(options?.expiresAt && { expiresAt: options.expiresAt }),
     };
     const record = await this.homeCompletionRepository.create(entity);
 

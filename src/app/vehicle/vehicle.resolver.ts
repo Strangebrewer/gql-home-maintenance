@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
+  IsDemo,
   JwtAccessGuard,
   JwtUserId,
 } from '../../common/guards/jwt-access.guard';
@@ -32,9 +33,10 @@ export class VehicleResolver {
   @UseGuards(JwtAccessGuard)
   async createVehicle(
     @JwtUserId() userId: string,
+    @IsDemo() isDemo: boolean,
     @Args('input') input: CreateVehicleInput,
   ): Promise<Vehicle> {
-    return this.vehicleService.create(input, userId);
+    return this.vehicleService.create(input, userId, { isDemo });
   }
 
   @Mutation(() => Vehicle)

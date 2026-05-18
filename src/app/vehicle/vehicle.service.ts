@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { DeleteResult } from '../../common/models/common.model';
 import { VehicleEntity } from './models/vehicle.entity';
 import {
@@ -27,11 +27,16 @@ export class VehicleService {
     return records.map(mapToModel);
   }
 
-  async create(args: CreateVehicleInput, userId: string): Promise<Vehicle> {
+  async create(args: CreateVehicleInput, userId: string, options?: { isDemo?: boolean; expiresAt?: Date }): Promise<Vehicle> {
+    if (options?.isDemo) {
+      const count = await this.vehicleRepository.count({ userId });
+      if (count >= 3) throw new ForbiddenException('demo vehicle limit reached');
+    }
     const entity: VehicleEntity = {
       ...args,
       userId,
       _id: randomUUID(),
+      ...(options?.expiresAt && { expiresAt: options.expiresAt }),
     };
     const record = await this.vehicleRepository.create(entity);
     return mapToModel(record);

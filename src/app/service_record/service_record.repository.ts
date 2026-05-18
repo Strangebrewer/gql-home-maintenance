@@ -31,6 +31,10 @@ export class ServiceRecordRepository {
     return entity;
   }
 
+  async count(filter: Filter<ServiceRecordEntity>): Promise<number> {
+    return this.collection.countDocuments(filter);
+  }
+
   async findOneAndUpdate(id: string, fields: UpdateFilter<ServiceRecordEntity>): Promise<ServiceRecordEntity> {
     return this.collection.findOneAndUpdate(
       { [this.primaryKey]: id } as Filter<ServiceRecordEntity>,

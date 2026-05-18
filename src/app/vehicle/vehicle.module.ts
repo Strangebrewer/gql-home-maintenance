@@ -13,5 +13,6 @@ import { VehicleService } from './vehicle.service';
     VehicleResolver,
     VehicleService,
   ],
+  exports: [VehicleService],
 })
 export class VehicleModule {}

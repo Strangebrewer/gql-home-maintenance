@@ -13,5 +13,6 @@ import { ServiceRecordService } from './service_record.service';
     ServiceRecordResolver,
     ServiceRecordService,
   ],
+  exports: [ServiceRecordService],
 })
 export class ServiceRecordModule {}

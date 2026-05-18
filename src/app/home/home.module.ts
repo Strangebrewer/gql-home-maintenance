@@ -8,6 +8,6 @@ import { HomeService } from './home.service';
 @Module({
   imports: [SharedModule],
   providers: [HomeCollectionFactory, HomeRepository, HomeResolver, HomeService],
-  exports: [HomeRepository],
+  exports: [HomeRepository, HomeService],
 })
 export class HomeModule {}

@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
+  IsDemo,
   JwtAccessGuard,
   JwtUserId,
 } from '../../common/guards/jwt-access.guard';
@@ -33,9 +34,10 @@ export class HomeTaskResolver {
   @UseGuards(JwtAccessGuard)
   async createHomeTask(
     @JwtUserId() userId: string,
+    @IsDemo() isDemo: boolean,
     @Args('input') input: CreateHomeTaskInput,
   ): Promise<HomeTask> {
-    return this.homeTaskService.create(input, userId);
+    return this.homeTaskService.create(input, userId, { isDemo });
   }
 
   @Mutation(() => HomeTask)

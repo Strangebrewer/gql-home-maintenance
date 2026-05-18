@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { Inject, Injectable } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { DeleteResult } from '../../common/models/common.model';
 import { HomeTaskEntity, HomeTaskFrequency } from './models/home_task.entity';
 import {
@@ -30,11 +30,16 @@ export class HomeTaskService {
     return records.map(mapToModel);
   }
 
-  async create(args: CreateHomeTaskInput, userId: string): Promise<HomeTask> {
+  async create(args: CreateHomeTaskInput, userId: string, options?: { isDemo?: boolean; expiresAt?: Date }): Promise<HomeTask> {
+    if (options?.isDemo) {
+      const count = await this.homeTaskRepository.count({ homeId: args.homeId });
+      if (count >= 8) throw new ForbiddenException('demo home task limit reached');
+    }
     const entity: HomeTaskEntity = {
       ...args,
       userId,
       _id: randomUUID(),
+      ...(options?.expiresAt && { expiresAt: options.expiresAt }),
     };
     const record = await this.homeTaskRepository.create(entity);
     return mapToModel(record);

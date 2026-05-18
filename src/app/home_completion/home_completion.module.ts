@@ -14,5 +14,6 @@ import { HomeCompletionService } from './home_completion.service';
     HomeCompletionResolver,
     HomeCompletionService,
   ],
+  exports: [HomeCompletionService],
 })
 export class HomeCompletionModule {}

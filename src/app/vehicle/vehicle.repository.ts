@@ -29,6 +29,10 @@ export class VehicleRepository {
     return entity;
   }
 
+  async count(filter: Filter<VehicleEntity>): Promise<number> {
+    return this.collection.countDocuments(filter);
+  }
+
   async findOneAndUpdate(id: string, fields: UpdateFilter<VehicleEntity>): Promise<VehicleEntity> {
     return this.collection.findOneAndUpdate(
       { [this.primaryKey]: id } as Filter<VehicleEntity>,

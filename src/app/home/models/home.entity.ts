@@ -7,4 +7,5 @@ export type HomeEntity = {
   sqFootage?: number;
   notes?: string;
   customData?: string;
+  expiresAt?: Date;
 };

@@ -14,4 +14,5 @@ export type HomeTaskEntity = {
   frequency: HomeTaskFrequency;
   description?: string;
   lastCompletionDate?: string;
+  expiresAt?: Date;
 };

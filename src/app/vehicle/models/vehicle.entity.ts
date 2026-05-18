@@ -10,4 +10,5 @@ export type VehicleEntity = {
   plate?: string;
   vin?: string;
   insuranceId?: string;
+  expiresAt?: Date;
 };

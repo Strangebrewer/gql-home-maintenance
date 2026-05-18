@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
+  IsDemo,
   JwtAccessGuard,
   JwtUserId,
 } from '../../common/guards/jwt-access.guard';
@@ -42,9 +43,10 @@ export class HomeCompletionResolver {
   @UseGuards(JwtAccessGuard)
   async createHomeCompletion(
     @JwtUserId() userId: string,
+    @IsDemo() isDemo: boolean,
     @Args('input') input: CreateHomeCompletionInput,
   ): Promise<HomeCompletion> {
-    return this.homeCompletionService.create(input, userId);
+    return this.homeCompletionService.create(input, userId, { isDemo });
   }
 
   @Mutation(() => HomeCompletion)

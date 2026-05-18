@@ -14,4 +14,5 @@ export type ServiceRecordEntity = {
   cost?: number;
   name?: string;
   description?: string;
+  expiresAt?: Date;
 };

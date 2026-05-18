@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { Inject, Injectable } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { DeleteResult } from '../../common/models/common.model';
 import {
   ServiceRecordEntity,
@@ -38,11 +38,17 @@ export class ServiceRecordService {
   async create(
     args: CreateServiceRecordInput,
     userId: string,
+    options?: { isDemo?: boolean; expiresAt?: Date },
   ): Promise<ServiceRecord> {
+    if (options?.isDemo) {
+      const count = await this.serviceRecordRepository.count({ vehicleId: args.vehicleId });
+      if (count >= 5) throw new ForbiddenException('demo service record limit reached');
+    }
     const entity: ServiceRecordEntity = {
       ...args,
       userId,
       _id: randomUUID(),
+      ...(options?.expiresAt && { expiresAt: options.expiresAt }),
     };
     const record = await this.serviceRecordRepository.create(entity);
     return mapToModel(record);

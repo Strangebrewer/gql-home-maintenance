@@ -15,6 +15,7 @@ import { ServiceRecordModule } from './app/service_record/service_record.module'
 import { VehicleModule } from './app/vehicle/vehicle.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TraceInterceptor } from './common/interceptors/trace.interceptor';
+import { PubSubModule } from './app/pubsub/pubsub.module';
 import { RubeModule } from './app/rube/rube.module';
 
 @Module({
@@ -56,6 +57,7 @@ import { RubeModule } from './app/rube/rube.module';
     HomeModule,
     HomeTaskModule,
     HomeCompletionModule,
+    PubSubModule,
     RubeModule,
   ],
   providers: [

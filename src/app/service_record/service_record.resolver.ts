@@ -8,6 +8,7 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import {
+  IsDemo,
   JwtAccessGuard,
   JwtUserId,
 } from '../../common/guards/jwt-access.guard';
@@ -49,9 +50,10 @@ export class ServiceRecordResolver {
   @UseGuards(JwtAccessGuard)
   async createServiceRecord(
     @JwtUserId() userId: string,
+    @IsDemo() isDemo: boolean,
     @Args('input') input: CreateServiceRecordInput,
   ): Promise<ServiceRecord> {
-    return this.serviceRecordService.create(input, userId);
+    return this.serviceRecordService.create(input, userId, { isDemo });
   }
 
   @Mutation(() => ServiceRecord)
