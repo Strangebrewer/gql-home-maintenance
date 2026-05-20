@@ -23,6 +23,7 @@ import { ServiceRecordService } from './service_record.service';
 
 @ArgsType()
 class GetServiceRecordsArgs {
+  @Field()
   id: string;
   @Field(() => ServiceRecordType, { nullable: true })
   type?: ServiceRecordType;
