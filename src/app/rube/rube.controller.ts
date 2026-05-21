@@ -57,7 +57,7 @@ export class RubeController {
     try {
       downstream = await axios.post(
         nextUrl,
-        { words, userId: req.body['userId'] },
+        { words, userId: req.body['userId'], expiresAt: req.body['expiresAt'] },
         { headers },
       );
     } catch (error) {
