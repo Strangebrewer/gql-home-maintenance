@@ -1,7 +1,16 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { JwtAccessGuard, JwtUserId } from '../../common/guards/jwt-access.guard';
-import { CreateVehicleArgs, DeleteResult, Vehicle, UpdateVehicleArgs } from './vehicle.model';
+import {
+  IsDemo,
+  JwtAccessGuard,
+  JwtUserId,
+} from '../../common/guards/jwt-access.guard';
+import { DeleteResult } from '../../common/models/common.model';
+import {
+  CreateVehicleInput,
+  Vehicle,
+  UpdateVehicleInput,
+} from './models/vehicle.model';
 import { VehicleService } from './vehicle.service';
 
 @Resolver(() => Vehicle)
@@ -10,17 +19,13 @@ export class VehicleResolver {
 
   @Query(() => Vehicle)
   @UseGuards(JwtAccessGuard)
-  async getVehicle(
-    @Args('id') id: string,
-  ): Promise<Vehicle> {
+  async getVehicle(@Args('id') id: string): Promise<Vehicle> {
     return this.vehicleService.findById(id);
   }
 
   @Query(() => [Vehicle])
   @UseGuards(JwtAccessGuard)
-  async getVehicles(
-    @JwtUserId() userId: string,
-  ): Promise<Vehicle[]> {
+  async getVehicles(@JwtUserId() userId: string): Promise<Vehicle[]> {
     return this.vehicleService.find(userId);
   }
 
@@ -28,25 +33,24 @@ export class VehicleResolver {
   @UseGuards(JwtAccessGuard)
   async createVehicle(
     @JwtUserId() userId: string,
-    @Args() args: CreateVehicleArgs,
+    @IsDemo() isDemo: boolean,
+    @Args('input') input: CreateVehicleInput,
   ): Promise<Vehicle> {
-    return this.vehicleService.create(args, userId);
+    return this.vehicleService.create(input, userId, { isDemo });
   }
 
   @Mutation(() => Vehicle)
   @UseGuards(JwtAccessGuard)
   async updateVehicle(
     @Args('id') id: string,
-    @Args() args: UpdateVehicleArgs,
+    @Args('input') input: UpdateVehicleInput,
   ): Promise<Vehicle> {
-    return this.vehicleService.update(id, args);
+    return this.vehicleService.update(id, input);
   }
 
   @Mutation(() => DeleteResult)
   @UseGuards(JwtAccessGuard)
-  async deleteVehicle(
-    @Args('id') id: string,
-  ): Promise<DeleteResult> {
+  async deleteVehicle(@Args('id') id: string): Promise<DeleteResult> {
     return this.vehicleService.delete(id);
   }
 }

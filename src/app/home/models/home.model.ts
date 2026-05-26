@@ -1,0 +1,36 @@
+import { Directive, InputType, ObjectType } from '@nestjs/graphql';
+
+// @Field() decorators are not required on these types — the @nestjs/graphql
+// CLI plugin (configured in nest-cli.json) infers them automatically from
+// files matching the .model.ts suffix.
+
+@ObjectType()
+@Directive('@key(fields: "id")')
+export class Home {
+  id: string;
+  userId: string;
+  address: string;
+  isPrimary: boolean;
+  yearBuilt?: number;
+  sqFootage?: number;
+  notes?: string;
+  customData?: string;
+}
+
+@InputType()
+export class CreateHomeInput {
+  address: string;
+  yearBuilt?: number;
+  sqFootage?: number;
+  notes?: string;
+  customData?: string;
+}
+
+@InputType()
+export class UpdateHomeInput {
+  address?: string;
+  yearBuilt?: number;
+  sqFootage?: number;
+  notes?: string;
+  customData?: string;
+}
