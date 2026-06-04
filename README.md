@@ -1,6 +1,6 @@
 # gql-home-maintenance
 
-A NestJS Apollo Federation 2 subgraph for home and vehicle maintenance tracking. Part of the [personal-enterprise](https://github.com/Strangebrewer/personal-enterprise) federated GraphQL layer.
+A NestJS Apollo Federation 2 subgraph for home and vehicle maintenance tracking. Part of my personal-enterprise federated GraphQL layer.
 
 ---
 
