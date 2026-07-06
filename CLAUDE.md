@@ -11,20 +11,22 @@ Created from `gql-subgraph-template`. All patterns, structure, and tooling are i
 ## Domains
 
 ### `vehicle`
-| Detail | Value |
-|---|---|
-| ID prefix | `VHL-` |
+
+| Detail             | Value                 |
+| ------------------ | --------------------- |
+| ID prefix          | `VHL-`                |
 | Collection env var | `VEHICLES_COLLECTION` |
-| Collection default | `vehicles` |
+| Collection default | `vehicles`            |
 
 Fields: `id`, `userId`, `year`, `make`, `model`, `mileage`, `color?`, `trim?`, `plate?`, `vin?`, `insuranceId?`
 
 ### `service_record`
-| Detail | Value |
-|---|---|
-| ID prefix | `SVC-` |
+
+| Detail             | Value                        |
+| ------------------ | ---------------------------- |
+| ID prefix          | `SVC-`                       |
 | Collection env var | `SERVICE_RECORDS_COLLECTION` |
-| Collection default | `service_records` |
+| Collection default | `service_records`            |
 
 Fields: `id`, `vehicleId`, `type` (enum), `date`, `mileage`, `cost?`, `name?`, `description?`
 
@@ -33,11 +35,12 @@ Fields: `id`, `vehicleId`, `type` (enum), `date`, `mileage`, `cost?`, `name?`, `
 `type` is set on create and never updated — `UpdateServiceRecordArgs` does not include it.
 
 ### `home`
-| Detail | Value |
-|---|---|
-| ID prefix | `HOM-` |
+
+| Detail             | Value                     |
+| ------------------ | ------------------------- |
+| ID prefix          | `HOM-`                    |
 | Collection env var | `HOME_RECORDS_COLLECTION` |
-| Collection default | `home_records` |
+| Collection default | `home_records`            |
 
 Fields: `id`, `userId`, `address`, `isPrimary: boolean`, `customData?: string`, `yearBuilt?`, `sqFootage?`, `lotSize?`, `purchasePrice?`, `purchaseDate?`, `notes?`
 
@@ -45,26 +48,29 @@ Fields: `id`, `userId`, `address`, `isPrimary: boolean`, `customData?: string`, 
 - `customData` — stored as a plain object in MongoDB but exposed as a `String` in the GraphQL schema (serialized with `JSON.stringify` on create/update). Avoids graphql-scalars dependency. Frontend parses/serializes at the boundary.
 
 ### `home_task`
-| Detail | Value |
-|---|---|
-| ID prefix | `TSK-` |
+
+| Detail             | Value                   |
+| ------------------ | ----------------------- |
+| ID prefix          | `TSK-`                  |
 | Collection env var | `HOME_TASKS_COLLECTION` |
-| Collection default | `home_tasks` |
+| Collection default | `home_tasks`            |
 
 Fields: `id`, `homeId`, `name`, `frequency` (enum), `description?`, `lastCompletionDate?: string`
 
 `HomeTaskFrequency`: `MONTHLY` | `SEASONAL` | `BI_ANNUAL` | `ANNUAL` | `AS_NEEDED`
 
 `lastCompletionDate` — denormalized from `home_completion`. Kept in sync by `HomeCompletionService`:
+
 - On **create**: if `args.date > task.lastCompletionDate`, update the task
 - On **delete**: fetch the completion first (to get `taskId`), delete it, then call `findMostRecentByTask` and update the task with the result (or `null` if no completions remain)
 
 ### `home_completion`
-| Detail | Value |
-|---|---|
-| ID prefix | `CMP-` |
+
+| Detail             | Value                         |
+| ------------------ | ----------------------------- |
+| ID prefix          | `CMP-`                        |
 | Collection env var | `HOME_COMPLETIONS_COLLECTION` |
-| Collection default | `home_completions` |
+| Collection default | `home_completions`            |
 
 Fields: `id`, `homeId`, `taskId`, `date`, `cost?`, `notes?`
 

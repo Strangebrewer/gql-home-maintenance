@@ -1,5 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Collection, Filter, FindOptions, ReturnDocument, UpdateFilter } from 'mongodb';
+import {
+  Collection,
+  Filter,
+  FindOptions,
+  ReturnDocument,
+  UpdateFilter,
+} from 'mongodb';
 import { VEHICLE_COLLECTION } from '../../common/factory/vehicle.factory';
 import { VehicleEntity } from './models/vehicle.entity';
 
@@ -12,15 +18,24 @@ export class VehicleRepository {
     private readonly collection: Collection<VehicleEntity>,
   ) {}
 
-  async findOne(filter: Filter<VehicleEntity>, options?: FindOptions): Promise<VehicleEntity> {
+  async findOne(
+    filter: Filter<VehicleEntity>,
+    options?: FindOptions,
+  ): Promise<VehicleEntity> {
     return this.collection.findOne(filter, options);
   }
 
   async findById(id: string, options?: FindOptions): Promise<VehicleEntity> {
-    return this.collection.findOne({ [this.primaryKey]: id } as Filter<VehicleEntity>, options);
+    return this.collection.findOne(
+      { [this.primaryKey]: id } as Filter<VehicleEntity>,
+      options,
+    );
   }
 
-  async find(filter: Filter<VehicleEntity>, options?: FindOptions): Promise<VehicleEntity[]> {
+  async find(
+    filter: Filter<VehicleEntity>,
+    options?: FindOptions,
+  ): Promise<VehicleEntity[]> {
     return this.collection.find(filter, options).toArray();
   }
 
@@ -33,7 +48,10 @@ export class VehicleRepository {
     return this.collection.countDocuments(filter);
   }
 
-  async findOneAndUpdate(id: string, fields: UpdateFilter<VehicleEntity>): Promise<VehicleEntity> {
+  async findOneAndUpdate(
+    id: string,
+    fields: UpdateFilter<VehicleEntity>,
+  ): Promise<VehicleEntity> {
     return this.collection.findOneAndUpdate(
       { [this.primaryKey]: id } as Filter<VehicleEntity>,
       { $set: fields },
@@ -42,6 +60,8 @@ export class VehicleRepository {
   }
 
   async deleteOne(id: string) {
-    return this.collection.deleteOne({ [this.primaryKey]: id } as Filter<VehicleEntity>);
+    return this.collection.deleteOne({
+      [this.primaryKey]: id,
+    } as Filter<VehicleEntity>);
   }
 }

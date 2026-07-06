@@ -42,8 +42,11 @@ export class HomeCompletionService {
     options?: { isDemo?: boolean; expiresAt?: Date },
   ): Promise<HomeCompletion> {
     if (options?.isDemo) {
-      const count = await this.homeCompletionRepository.count({ taskId: args.taskId });
-      if (count >= 10) throw new ForbiddenException('demo home completion limit reached');
+      const count = await this.homeCompletionRepository.count({
+        taskId: args.taskId,
+      });
+      if (count >= 10)
+        throw new ForbiddenException('demo home completion limit reached');
     }
     const task = await this.homeTaskRepository.findById(args.taskId);
     if (!task) {

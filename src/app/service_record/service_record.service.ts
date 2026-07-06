@@ -41,8 +41,11 @@ export class ServiceRecordService {
     options?: { isDemo?: boolean; expiresAt?: Date },
   ): Promise<ServiceRecord> {
     if (options?.isDemo) {
-      const count = await this.serviceRecordRepository.count({ vehicleId: args.vehicleId });
-      if (count >= 5) throw new ForbiddenException('demo service record limit reached');
+      const count = await this.serviceRecordRepository.count({
+        vehicleId: args.vehicleId,
+      });
+      if (count >= 5)
+        throw new ForbiddenException('demo service record limit reached');
     }
     const entity: ServiceRecordEntity = {
       ...args,

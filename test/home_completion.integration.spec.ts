@@ -112,7 +112,10 @@ describe('HomeCompletion (integration)', () => {
 
     await service.create({ taskId: task1._id, date: '2024-01-01' }, 'user-1');
     await service.create({ taskId: task2._id, date: '2024-06-01' }, 'user-1');
-    await service.create({ taskId: otherTask._id, date: '2024-01-01' }, 'user-1');
+    await service.create(
+      { taskId: otherTask._id, date: '2024-01-01' },
+      'user-1',
+    );
 
     const results = await service.findByHome('home-123');
     expect(results).toHaveLength(2);

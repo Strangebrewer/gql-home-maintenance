@@ -1,5 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Collection, Filter, FindOptions, ReturnDocument, UpdateFilter } from 'mongodb';
+import {
+  Collection,
+  Filter,
+  FindOptions,
+  ReturnDocument,
+  UpdateFilter,
+} from 'mongodb';
 import { HOME_COMPLETION_COLLECTION } from '../../common/factory/home_completion.factory';
 import { HomeCompletionEntity } from './models/home_completion.entity';
 
@@ -12,11 +18,20 @@ export class HomeCompletionRepository {
     private readonly collection: Collection<HomeCompletionEntity>,
   ) {}
 
-  async findById(id: string, options?: FindOptions): Promise<HomeCompletionEntity> {
-    return this.collection.findOne({ [this.primaryKey]: id } as Filter<HomeCompletionEntity>, options);
+  async findById(
+    id: string,
+    options?: FindOptions,
+  ): Promise<HomeCompletionEntity> {
+    return this.collection.findOne(
+      { [this.primaryKey]: id } as Filter<HomeCompletionEntity>,
+      options,
+    );
   }
 
-  async find(filter: Filter<HomeCompletionEntity>, options?: FindOptions): Promise<HomeCompletionEntity[]> {
+  async find(
+    filter: Filter<HomeCompletionEntity>,
+    options?: FindOptions,
+  ): Promise<HomeCompletionEntity[]> {
     return this.collection.find(filter, options).toArray();
   }
 
@@ -29,7 +44,10 @@ export class HomeCompletionRepository {
     return this.collection.countDocuments(filter);
   }
 
-  async findOneAndUpdate(id: string, fields: UpdateFilter<HomeCompletionEntity>): Promise<HomeCompletionEntity> {
+  async findOneAndUpdate(
+    id: string,
+    fields: UpdateFilter<HomeCompletionEntity>,
+  ): Promise<HomeCompletionEntity> {
     return this.collection.findOneAndUpdate(
       { [this.primaryKey]: id } as Filter<HomeCompletionEntity>,
       { $set: fields },
@@ -37,7 +55,9 @@ export class HomeCompletionRepository {
     );
   }
 
-  async findMostRecentByTask(taskId: string): Promise<HomeCompletionEntity | null> {
+  async findMostRecentByTask(
+    taskId: string,
+  ): Promise<HomeCompletionEntity | null> {
     const results = await this.collection
       .find({ taskId } as Filter<HomeCompletionEntity>)
       .sort({ date: -1 })
@@ -47,6 +67,8 @@ export class HomeCompletionRepository {
   }
 
   async deleteOne(id: string) {
-    return this.collection.deleteOne({ [this.primaryKey]: id } as Filter<HomeCompletionEntity>);
+    return this.collection.deleteOne({
+      [this.primaryKey]: id,
+    } as Filter<HomeCompletionEntity>);
   }
 }

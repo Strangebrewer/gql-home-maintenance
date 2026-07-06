@@ -8,7 +8,14 @@ import { ServiceRecordModule } from '../service_record/service_record.module';
 import { DemoService } from './demo.service';
 
 @Module({
-  imports: [SharedModule, HomeModule, HomeTaskModule, HomeCompletionModule, VehicleModule, ServiceRecordModule],
+  imports: [
+    SharedModule,
+    HomeModule,
+    HomeTaskModule,
+    HomeCompletionModule,
+    VehicleModule,
+    ServiceRecordModule,
+  ],
   providers: [DemoService],
   exports: [DemoService],
 })

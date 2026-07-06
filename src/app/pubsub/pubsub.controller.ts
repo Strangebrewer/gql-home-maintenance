@@ -1,4 +1,11 @@
-import { Body, Controller, Inject, Logger, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Inject,
+  Logger,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { OidcGuard } from '../../common/guards/oidc.guard';
 import { DemoService } from '../demo/demo.service';
 import { TRACER_CLIENT, TracerClient } from '../../shared/tracer/tracer.module';
@@ -28,7 +35,9 @@ export class PubSubController {
   async handleDemoRegistered(@Body() body: PubSubMessage): Promise<void> {
     let payload: DemoRegisteredPayload;
     try {
-      payload = JSON.parse(Buffer.from(body.message.data, 'base64').toString('utf8'));
+      payload = JSON.parse(
+        Buffer.from(body.message.data, 'base64').toString('utf8'),
+      );
     } catch (err) {
       this.logger.error('failed to decode demo-registered payload', err);
       return;
@@ -36,11 +45,23 @@ export class PubSubController {
 
     const start = new Date();
     try {
-      await this.demoService.seedDemoData(payload.userId, new Date(payload.expiresAt));
+      await this.demoService.seedDemoData(
+        payload.userId,
+        new Date(payload.expiresAt),
+      );
       this.tracer.sendSpan(payload.traceId, 'demo seed', start, new Date());
     } catch (err) {
-      this.logger.error('failed to seed demo data', { userId: payload.userId, err });
-      this.tracer.sendErrorSpan(payload.traceId, 'demo seed', String(err), start, new Date());
+      this.logger.error('failed to seed demo data', {
+        userId: payload.userId,
+        err,
+      });
+      this.tracer.sendErrorSpan(
+        payload.traceId,
+        'demo seed',
+        String(err),
+        start,
+        new Date(),
+      );
     }
   }
 }

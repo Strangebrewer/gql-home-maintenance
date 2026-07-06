@@ -30,10 +30,17 @@ export class HomeTaskService {
     return records.map(mapToModel);
   }
 
-  async create(args: CreateHomeTaskInput, userId: string, options?: { isDemo?: boolean; expiresAt?: Date }): Promise<HomeTask> {
+  async create(
+    args: CreateHomeTaskInput,
+    userId: string,
+    options?: { isDemo?: boolean; expiresAt?: Date },
+  ): Promise<HomeTask> {
     if (options?.isDemo) {
-      const count = await this.homeTaskRepository.count({ homeId: args.homeId });
-      if (count >= 8) throw new ForbiddenException('demo home task limit reached');
+      const count = await this.homeTaskRepository.count({
+        homeId: args.homeId,
+      });
+      if (count >= 8)
+        throw new ForbiddenException('demo home task limit reached');
     }
     const entity: HomeTaskEntity = {
       ...args,

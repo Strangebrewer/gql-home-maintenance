@@ -23,7 +23,11 @@ export class HomeService {
     return records.map(mapToModel);
   }
 
-  async create(args: CreateHomeInput, userId: string, options?: { isDemo?: boolean; expiresAt?: Date }): Promise<Home> {
+  async create(
+    args: CreateHomeInput,
+    userId: string,
+    options?: { isDemo?: boolean; expiresAt?: Date },
+  ): Promise<Home> {
     if (options?.isDemo) {
       const count = await this.homeRepository.count({ userId });
       if (count >= 4) throw new ForbiddenException('demo home limit reached');
