@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { OAuth2Client } from 'google-auth-library';
 import { PubSubConfig } from '../../config/pubsub';
@@ -12,7 +17,8 @@ export class OidcGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
-    const { serviceAccountEmail, audience } = this.configService.get<PubSubConfig>('pubsub');
+    const { serviceAccountEmail, audience } =
+      this.configService.get<PubSubConfig>('pubsub');
 
     if (!audience) {
       return true;
@@ -22,12 +28,17 @@ export class OidcGuard implements CanActivate {
     if (!authHeader) throw new UnauthorizedException();
 
     const [scheme, token] = authHeader.split(' ');
-    if (scheme?.toLowerCase() !== 'bearer' || !token) throw new UnauthorizedException();
+    if (scheme?.toLowerCase() !== 'bearer' || !token)
+      throw new UnauthorizedException();
 
     try {
-      const ticket = await this.client.verifyIdToken({ idToken: token, audience });
+      const ticket = await this.client.verifyIdToken({
+        idToken: token,
+        audience,
+      });
       const payload = ticket.getPayload();
-      if (payload?.email !== serviceAccountEmail) throw new UnauthorizedException();
+      if (payload?.email !== serviceAccountEmail)
+        throw new UnauthorizedException();
       return true;
     } catch {
       throw new UnauthorizedException();

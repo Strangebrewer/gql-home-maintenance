@@ -8,7 +8,10 @@ export const VEHICLE_COLLECTION = 'VEHICLE_COLLECTION';
 
 export const VehicleCollectionFactory = {
   provide: VEHICLE_COLLECTION,
-  useFactory: (configService: ConfigService, db: Db): Collection<VehicleEntity> => {
+  useFactory: (
+    configService: ConfigService,
+    db: Db,
+  ): Collection<VehicleEntity> => {
     const { collections } = configService.get<DatabaseConfig>('database');
     return db.collection(collections.vehicle);
   },

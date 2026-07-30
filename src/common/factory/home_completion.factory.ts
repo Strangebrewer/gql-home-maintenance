@@ -8,7 +8,10 @@ export const HOME_COMPLETION_COLLECTION = 'HOME_COMPLETION_COLLECTION';
 
 export const HomeCompletionCollectionFactory = {
   provide: HOME_COMPLETION_COLLECTION,
-  useFactory: (configService: ConfigService, db: Db): Collection<HomeCompletionEntity> => {
+  useFactory: (
+    configService: ConfigService,
+    db: Db,
+  ): Collection<HomeCompletionEntity> => {
     const { collections } = configService.get<DatabaseConfig>('database');
     return db.collection(collections.homeCompletion);
   },

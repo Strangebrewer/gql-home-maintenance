@@ -8,7 +8,10 @@ export const HOME_COLLECTION = 'HOME_COLLECTION';
 
 export const HomeCollectionFactory = {
   provide: HOME_COLLECTION,
-  useFactory: (configService: ConfigService, db: Db): Collection<HomeEntity> => {
+  useFactory: (
+    configService: ConfigService,
+    db: Db,
+  ): Collection<HomeEntity> => {
     const { collections } = configService.get<DatabaseConfig>('database');
     return db.collection(collections.home);
   },
