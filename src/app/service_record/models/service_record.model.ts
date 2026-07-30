@@ -1,4 +1,9 @@
-import { Field, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
+import {
+  Field,
+  InputType,
+  ObjectType,
+  registerEnumType,
+} from '@nestjs/graphql';
 import { ServiceRecordType } from './service_record.entity';
 
 // @Field() decorators are not required on these types — the @nestjs/graphql

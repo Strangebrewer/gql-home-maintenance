@@ -11,14 +11,18 @@ function validateEnv() {
 
   const hasMongoUri = !!process.env.MONGO_URI;
   const hasAtlasVars =
-    !!process.env.DB_USERNAME && !!process.env.DB_PASSWORD && !!process.env.DB_CLUSTER;
+    !!process.env.DB_USERNAME &&
+    !!process.env.DB_PASSWORD &&
+    !!process.env.DB_CLUSTER;
 
   if (!hasMongoUri && !hasAtlasVars) {
     missing.push('MONGO_URI or (DB_USERNAME + DB_PASSWORD + DB_CLUSTER)');
   }
 
   if (missing.length > 0) {
-    throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
+    throw new Error(
+      `Missing required environment variables: ${missing.join(', ')}`,
+    );
   }
 }
 

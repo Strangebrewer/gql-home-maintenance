@@ -1,4 +1,10 @@
-import { ArgsType, Field, InputType, ObjectType, registerEnumType } from '@nestjs/graphql';
+import {
+  ArgsType,
+  Field,
+  InputType,
+  ObjectType,
+  registerEnumType,
+} from '@nestjs/graphql';
 import { HomeTaskFrequency } from './home_task.entity';
 
 @ArgsType()

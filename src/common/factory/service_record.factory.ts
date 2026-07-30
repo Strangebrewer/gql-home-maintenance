@@ -8,7 +8,10 @@ export const SERVICE_RECORD_COLLECTION = 'SERVICE_RECORD_COLLECTION';
 
 export const ServiceRecordCollectionFactory = {
   provide: SERVICE_RECORD_COLLECTION,
-  useFactory: (configService: ConfigService, db: Db): Collection<ServiceRecordEntity> => {
+  useFactory: (
+    configService: ConfigService,
+    db: Db,
+  ): Collection<ServiceRecordEntity> => {
     const { collections } = configService.get<DatabaseConfig>('database');
     return db.collection(collections.serviceRecord);
   },

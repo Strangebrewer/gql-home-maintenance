@@ -1,7 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Collection, Filter, FindOptions, ReturnDocument, UpdateFilter } from 'mongodb';
+import {
+  Collection,
+  Filter,
+  FindOptions,
+  ReturnDocument,
+  UpdateFilter,
+} from 'mongodb';
 import { SERVICE_RECORD_COLLECTION } from '../../common/factory/service_record.factory';
-import { ServiceRecordEntity, ServiceRecordType } from './models/service_record.entity';
+import {
+  ServiceRecordEntity,
+  ServiceRecordType,
+} from './models/service_record.entity';
 
 @Injectable()
 export class ServiceRecordRepository {
@@ -12,15 +21,28 @@ export class ServiceRecordRepository {
     private readonly collection: Collection<ServiceRecordEntity>,
   ) {}
 
-  async findOne(filter: Filter<ServiceRecordEntity>, options?: FindOptions): Promise<ServiceRecordEntity> {
+  async findOne(
+    filter: Filter<ServiceRecordEntity>,
+    options?: FindOptions,
+  ): Promise<ServiceRecordEntity> {
     return this.collection.findOne(filter, options);
   }
 
-  async findById(id: string, options?: FindOptions): Promise<ServiceRecordEntity> {
-    return this.collection.findOne({ [this.primaryKey]: id } as Filter<ServiceRecordEntity>, options);
+  async findById(
+    id: string,
+    options?: FindOptions,
+  ): Promise<ServiceRecordEntity> {
+    return this.collection.findOne(
+      { [this.primaryKey]: id } as Filter<ServiceRecordEntity>,
+      options,
+    );
   }
 
-  async find(vehicleId: string, type?: ServiceRecordType, options?: FindOptions): Promise<ServiceRecordEntity[]> {
+  async find(
+    vehicleId: string,
+    type?: ServiceRecordType,
+    options?: FindOptions,
+  ): Promise<ServiceRecordEntity[]> {
     const filter: Filter<ServiceRecordEntity> = { vehicleId };
     if (type) filter.type = type;
     return this.collection.find(filter, options).toArray();
@@ -35,7 +57,10 @@ export class ServiceRecordRepository {
     return this.collection.countDocuments(filter);
   }
 
-  async findOneAndUpdate(id: string, fields: UpdateFilter<ServiceRecordEntity>): Promise<ServiceRecordEntity> {
+  async findOneAndUpdate(
+    id: string,
+    fields: UpdateFilter<ServiceRecordEntity>,
+  ): Promise<ServiceRecordEntity> {
     return this.collection.findOneAndUpdate(
       { [this.primaryKey]: id } as Filter<ServiceRecordEntity>,
       { $set: fields },
@@ -44,6 +69,8 @@ export class ServiceRecordRepository {
   }
 
   async deleteOne(id: string) {
-    return this.collection.deleteOne({ [this.primaryKey]: id } as Filter<ServiceRecordEntity>);
+    return this.collection.deleteOne({
+      [this.primaryKey]: id,
+    } as Filter<ServiceRecordEntity>);
   }
 }

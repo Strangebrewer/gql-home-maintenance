@@ -27,10 +27,15 @@ export class VehicleService {
     return records.map(mapToModel);
   }
 
-  async create(args: CreateVehicleInput, userId: string, options?: { isDemo?: boolean; expiresAt?: Date }): Promise<Vehicle> {
+  async create(
+    args: CreateVehicleInput,
+    userId: string,
+    options?: { isDemo?: boolean; expiresAt?: Date },
+  ): Promise<Vehicle> {
     if (options?.isDemo) {
       const count = await this.vehicleRepository.count({ userId });
-      if (count >= 3) throw new ForbiddenException('demo vehicle limit reached');
+      if (count >= 3)
+        throw new ForbiddenException('demo vehicle limit reached');
     }
     const entity: VehicleEntity = {
       ...args,
